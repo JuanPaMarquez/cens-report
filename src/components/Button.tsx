@@ -1,6 +1,7 @@
+import { ReactNode } from "react"
 import { useNavigate, useLocation } from "react-router"
 
-export function ButtonMenu ({ 
+function ButtonMenu ({ 
   children,
   icon: Icon,
 }:{ 
@@ -27,4 +28,26 @@ export function ButtonMenu ({
   )
 }
 
-export { ButtonMenu as default }
+function ButtonLogin ({ 
+  children, 
+  onClick,
+  type='button', 
+  className='bg-green-500 hover:bg-green-600'
+}:{ 
+  children: ReactNode, 
+  onClick?: () => void,
+  type?: "button" | "submit" | "reset", 
+  className?: string 
+}) {
+  return (
+    <button 
+      type={type} 
+      onClick={onClick}
+      className={`w-60 h-9 rounded-2xl cursor-pointer ${className}`}
+    >
+      {children}
+    </button>
+  ) 
+}
+
+export { ButtonMenu, ButtonLogin }

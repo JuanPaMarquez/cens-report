@@ -7,6 +7,7 @@ import Actualizar from "../layouts/Actualizar/Actualizar"
 import Ajustes from "../layouts/Ajustes/Ajustes"
 import Cuenta from "../layouts/Cuenta/Cuenta"
 import Ayuda from "../layouts/Ayuda/Ayuda"
+import Login from "../layouts/Login/Login"
 
 function App() {
 
@@ -22,6 +23,8 @@ function App() {
         <Route path="/ajustes" element={<MainPage><Ajustes /></MainPage>} />
         <Route path="/cuenta" element={<MainPage><Cuenta /></MainPage>} />
         <Route path="/ayuda" element={<MainPage><Ayuda /></MainPage>} />
+
+        <Route path="/login" element={<Login />} />
       
         {/* Ruta de 404 */}
         <Route path="*" element={<NotFound />} />

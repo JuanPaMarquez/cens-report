@@ -39,7 +39,7 @@ export default function Subir() {
           Subir
         </button>
       </form>
-      <p>{file.name}</p>
+      <p>{file.name || 'No hay archivo cargado'}</p>
     </>
   )
 }
