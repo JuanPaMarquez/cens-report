@@ -1,12 +1,13 @@
 Tareas pendientes:
 
 1. Temas de Interfaz
-   - Crear la interfaz de Dashboard
-   - Crear la interfaz de Reportes
-   - Crear la interfaz de Actualizar
+   - Crear la interfaz de login (100%)
+   - Crear la interfaz de Actualizar (100%)
+   - Crear la interfaz de Dashboard (80%)
    - Crear la interfaz de Ajustes
    - Crear la interfaz de Cuenta
    - Crear la interfaz de Ayuda
+   - Crear la interfaz de Reportes
 
 2. Graficas de Dashboard (Tipo de grafica)
    - Estado de Transformadores (barras)
