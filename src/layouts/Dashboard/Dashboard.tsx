@@ -10,9 +10,9 @@ export default function Dashboard() {
     <div className="w-full h-full p-3">
       <h1 className="pb-2 font-bold">Ultima actualizacion: {currentDate}</h1>
       <div id="table-graficas" className="w-full h-screen">
-        <div className=" grid grid-flow-dense gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center">
+        <div className="grid grid-flow-dense gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-center">
           {data.map((item, index) => (
-            <div key={index} className={`py-8 px-2 h-70 rounded-md shadow-md col-span-1 ${item === 3 || item === 10 ? 'md:col-span-2' : ''}`}>
+            <div key={index} className={`pb-5 pt-2 px-2 h-70 rounded-md shadow-md col-span-1 ${item === 3 || item === 10 ? 'md:col-span-2' : ''}`}>
               <h1 className="text-center">Grafica {item}</h1>
               <div className="flex justify-start items-center h-full">
                 {item % 2 !== 0? <LinePlot2 /> : <CirclePlot />}

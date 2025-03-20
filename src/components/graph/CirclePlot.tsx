@@ -12,6 +12,10 @@ export default function CirclePlot({
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
+  const color = d3
+    .scaleOrdinal<string>(["#45DC20", "#1DC1DE", "#FF5454"])
+    .domain(data.map((d) => d.label))
+
   useEffect(() => {
     // Usar ResizeObserver para actualizar las dimensiones del contenedor
     const resizeObserver = new ResizeObserver((entries) => {
@@ -35,12 +39,6 @@ export default function CirclePlot({
 
     const { width, height } = dimensions;
     const radius = Math.min(width, height) / 2;
-
-    // Crear colores
-    const color = d3
-      .scaleOrdinal<string>()
-      .domain(data.map((d) => d.label))
-      .range(d3.schemeCategory10);
 
     // Crear el generador de gráficos de torta
     const pie = d3
@@ -79,10 +77,10 @@ export default function CirclePlot({
       .attr("font-size", "12px")
       .attr("fill", "black")
       .text((d) => d.data.value);
-  }, [dimensions, data]);
+  }, [dimensions, data, color]);
 
   return (
-    <div ref={containerRef} className="w-full h-full flex flex-row-reverse items-center relative">
+    <div ref={containerRef} className="w-full h-full flex flex-row-reverse items-center relative md:pt-10">
       <svg
         ref={svgRef}
         viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
@@ -94,11 +92,11 @@ export default function CirclePlot({
           <div key={i} className="flex mr-4 ">
             <div
               className="w-4 h-4 mr-2"
-              style={{ backgroundColor: d3.schemeCategory10[i] }}
+              style={{ backgroundColor: color(d.label) }}
             ></div>
             <span className="text-[10px]">{d.label}</span>
-          </div>
-        ))}
+          </div>)
+        )}
       </div>
     </div>
   );

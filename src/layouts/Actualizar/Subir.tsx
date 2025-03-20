@@ -1,16 +1,51 @@
+import * as XLSX from 'xlsx'
 import { useState } from "react"
+import dataFilter from '../../lib/datos'
+import { TransformadorCrude } from '../../schemas/transformadoresSchema'
+import useTableStore from '../../service/CurrentTable'
+import { useNavigate } from 'react-router'
 
 export default function Subir() {
-  const [file, setFile] = useState({ name: '', data: {} })
+  const navegar = useNavigate()
+  const [fileName, setFileName] = useState<string>('')
+  const { tableData, setTable } = useTableStore()
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    setFile({ name: file?.name || '', data: file || {} })
+    setFileName(file?.name || '')
+    if (file) {
+      const reader = new FileReader();
+      // Se lee el archivo
+      reader.onload = (event) => {
+        const data = new Uint8Array(event.target?.result as ArrayBuffer);
+        
+        const workbook = XLSX.read(data, { type: 'array' });
+  
+        const sheetName = workbook.SheetNames[0];
+        console.log("sheetName", sheetName);
+  
+        const worksheet = workbook.Sheets[sheetName];
+        console.log("worksheet", worksheet);
+        
+        if (worksheet['!ref']) {
+          const recorted = worksheet['!ref'].split(':')
+          worksheet['!ref'] = 'A2:' + recorted[1];     
+        }
+  
+        const json: TransformadorCrude[] = XLSX.utils.sheet_to_json(worksheet);
+        setTable(dataFilter(json))
+      }
+      reader.readAsArrayBuffer(file);
+    }
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setFile({ name: '', data: {} })
+    if (tableData) {
+      navegar('/dashboard')
+    } else {
+      console.log("no hay datos por subir")
+    }
   }
   
   return (
@@ -39,7 +74,7 @@ export default function Subir() {
           Subir
         </button>
       </form>
-      <p>{file.name || 'No hay archivo cargado'}</p>
+      <p>{fileName || 'No hay archivo cargado'}</p>
     </>
   )
 }
