@@ -5,8 +5,7 @@ export default function CirclePlot({
   data = [
     { label: "Operativos", value: Math.ceil(Math.random() * 100) },
     { label: "Inactivos", value: Math.ceil(Math.random() * 100) },
-    { label: "C", value: Math.ceil(Math.random() * 100) },
-    { label: "D", value: Math.ceil(Math.random() * 100) },
+    { label: "Fallando", value: Math.ceil(Math.random() * 100) },
   ],
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
