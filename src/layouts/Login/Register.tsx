@@ -1,5 +1,5 @@
-import { ButtonLogin } from "../../components/Button";
-import { InputRegister } from "../../components/Inputs";
+import { ButtonLogin } from "../../components/ui/Button";
+import { InputRegister } from "../../components/ui/Inputs";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useState } from "react"
 

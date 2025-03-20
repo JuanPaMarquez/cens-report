@@ -1,6 +1,6 @@
 // import LinePlot from "../../components/LinePlot"
-import CirclePlot from "../../components/circlePlot"
-import LinePlot2 from "../../components/LinePlot2"
+import CirclePlot from "../../components/graph/CirclePlot"
+import LinePlot2 from "../../components/graph/LinePlot2"
 
 export default function Dashboard() {
   const data = [1,2,3,4,5,6,7,8,9,10]

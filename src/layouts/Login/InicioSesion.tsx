@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { FiUser, FiLock } from "react-icons/fi";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
-import { ButtonLogin } from "../../components/Button";
-import { InputLogin } from "../../components/Inputs";
+import { ButtonLogin } from "../../components/ui/Button";
+import { InputLogin } from "../../components/ui/Inputs";
 import { useNavigate } from "react-router";
 
 export default function InicioSesion (){

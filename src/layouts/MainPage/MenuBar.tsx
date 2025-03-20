@@ -1,5 +1,5 @@
 import { MdSpaceDashboard, MdReport, MdAddCircle, MdOutlineSettings, MdAccountCircle, MdHelp  } from "react-icons/md";
-import {ButtonMenu} from "../../components/Button";
+import {ButtonMenu} from "../../components/ui/Button";
 
 export default function MenuBar() {
   return (

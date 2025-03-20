@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { ButtonLogin } from "../../components/Button"
+import { ButtonLogin } from "../../components/ui/Button"
 import Register from "./Register"
 import InicioSesion from "./InicioSesion"
 
