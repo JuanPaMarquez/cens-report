@@ -1,11 +1,28 @@
 import { useState } from "react";
 import { MdDelete } from "react-icons/md";
+import Historial from "../../schemas/historialSchema";
 
 export default function ListarExcel() {
 
   const [isDelete, setIsDelete] = useState(false)
 
-  const data = [1,2,3,4]
+  const data: Historial[] = [
+    {
+      idHistorial: 1,
+      nombreTabla: 'Transformadores de potencia CENS 1',
+      fechaSubida: '01/05/2025'
+    },
+    {
+      idHistorial: 2,
+      nombreTabla: 'Transformadores de potencia CENS 2',
+      fechaSubida: '02/05/2025'
+    },
+    {
+      idHistorial: 3,
+      nombreTabla: 'Transformadores de potencia CENS 3',
+      fechaSubida: '03/05/2025'
+    }
+  ]
 
   const handleDelete = () => {
     console.log('Borrando')
@@ -39,9 +56,9 @@ export default function ListarExcel() {
             {data.map((item, index) => (
               <tr key={index} className="border-b-1">
                 <td className="px-4 py-2">
-                  Transformadores de potencia CENS {item}
+                  {item.nombreTabla}
                 </td>
-                <td className="text-center px-4 py-2">{`${item}/05/2025`}</td>
+                <td className="text-center px-4 py-2">{item.fechaSubida}</td>
                 <td className="">
                   <div className="flex justify-end pr-4">
                     { /* Verifica si el usuario quiere borrar o no */

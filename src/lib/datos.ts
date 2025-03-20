@@ -1,12 +1,12 @@
 import { TransformadorTabla, TransformadorCrude } from "../schemas/transformadoresSchema"
 
-export default function dataFilter (data: Array<TransformadorCrude>) {
-  console.log("data filter: ", data)
+function dataFilter (data: Array<TransformadorCrude>) {
   const transformadores: TransformadorTabla[] = []
   for (const key in data) {
     const element = data[key];
     // console.log("Claves del elemento:", Object.keys(element)); // Ver todas las claves del objeto
     const transformador: TransformadorTabla = {
+      "idHistorial": 0,
       "TR": element["TR"]?.toString() || "",
       "Número de Subestación": element["Número de Subestación"]?.toString() || "",
       "Estado": element["Estado"]?.toString() || "",
@@ -52,3 +52,36 @@ export default function dataFilter (data: Array<TransformadorCrude>) {
   
   return transformadores
 }
+
+function datosEstados (data: TransformadorTabla[]) {
+  const estados: string[] = []
+  for (const key in data) {
+    const element = data[key];
+    if (!estados.includes(element["Estado"])) {
+      estados.push(element["Estado"])
+    }
+  }
+  return estados
+}
+
+function datosEstadoTransformadores (data: TransformadorTabla[]) {
+  const estados = datosEstados(data)
+  const estadosTransformadores: { label: string, value: number }[] = []
+  for (const key in estados) {
+    const estado = estados[key];
+    const cantidad = data.filter((element) => element["Estado"] === estado).length
+    estadosTransformadores.push({ label: estado, value: cantidad })
+  }
+
+  return estadosTransformadores
+}
+
+function totalTransformadores (data: TransformadorTabla[]) {
+  const datosTotalTransformadores: { label: string, value: number }[] = []
+  datosTotalTransformadores.push({ label: "Total", value: data.length })
+
+
+  return datosTotalTransformadores
+}
+
+export { dataFilter, datosEstados, datosEstadoTransformadores, totalTransformadores }

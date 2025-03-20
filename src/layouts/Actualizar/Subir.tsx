@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx'
 import { useState } from "react"
-import dataFilter from '../../lib/datos'
+import { dataFilter } from '../../lib/datos'
 import { TransformadorCrude } from '../../schemas/transformadoresSchema'
 import useTableStore from '../../service/CurrentTable'
 import { useNavigate } from 'react-router'
@@ -22,10 +22,8 @@ export default function Subir() {
         const workbook = XLSX.read(data, { type: 'array' });
   
         const sheetName = workbook.SheetNames[0];
-        console.log("sheetName", sheetName);
   
         const worksheet = workbook.Sheets[sheetName];
-        console.log("worksheet", worksheet);
         
         if (worksheet['!ref']) {
           const recorted = worksheet['!ref'].split(':')

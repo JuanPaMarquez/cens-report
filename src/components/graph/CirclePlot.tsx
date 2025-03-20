@@ -13,7 +13,7 @@ export default function CirclePlot({
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   const color = d3
-    .scaleOrdinal<string>(["#45DC20", "#1DC1DE", "#FF5454"])
+    .scaleOrdinal<string>(["#79FF58", "#54C9FF", "#FF5954"])
     .domain(data.map((d) => d.label))
 
   useEffect(() => {

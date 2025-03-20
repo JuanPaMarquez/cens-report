@@ -1,4 +1,5 @@
 interface TransformadorTabla {
+  'idHistorial': number;
   'TR': string;
   'Número de Subestación': string;
   'Estado': string;
