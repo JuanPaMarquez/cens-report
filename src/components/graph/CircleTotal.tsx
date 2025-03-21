@@ -8,14 +8,17 @@ interface CircleTotalProps {
 
 const CircleTotal = ({
   data = [
-    { label: "Operativos", value: Math.ceil(Math.random() * 100) },
-    { label: "Inactivos", value: Math.ceil(Math.random() * 100) },
-    { label: "Fallando", value: Math.ceil(Math.random() * 100) },
+    { label: "Operativos", value: 10 },
+    { label: "Inactivos", value: 20},
+    { label: "Fallando", value: 30},
   ],
   colors = ["#45DC20", "#1DC1DE", "#FF5454"], // Colores por defecto
+
 }: CircleTotalProps) => {
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
+  
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
@@ -97,7 +100,6 @@ const CircleTotal = ({
       .attr("transform", (d) => `translate(${arc.centroid(d)})`)
       .attr("text-anchor", "middle")
       .attr("font-size", "12px")
-      .attr("fill", "white")
       .text((d) => d.data.value);
 
     // Crear la leyenda fuera del gráfico

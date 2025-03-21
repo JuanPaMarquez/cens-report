@@ -53,35 +53,59 @@ function dataFilter (data: Array<TransformadorCrude>) {
   return transformadores
 }
 
-function datosEstados (data: TransformadorTabla[]) {
-  const estados: string[] = []
-  for (const key in data) {
-    const element = data[key];
-    if (!estados.includes(element["Estado"])) {
-      estados.push(element["Estado"])
+function contarTipos<K extends keyof TransformadorTabla>(data: TransformadorTabla[], campo: K) {
+  const elementos: TransformadorTabla[K][] = []
+
+  for (const item in data) {
+    const element = data[item];
+    if (!elementos.includes(element[campo])) {
+      elementos.push(element[campo])
     }
   }
-  return estados
+  return elementos
 }
 
-function datosEstadoTransformadores (data: TransformadorTabla[]) {
-  const estados = datosEstados(data)
-  const estadosTransformadores: { label: string, value: number }[] = []
-  for (const key in estados) {
-    const estado = estados[key];
-    const cantidad = data.filter((element) => element["Estado"] === estado).length
-    estadosTransformadores.push({ label: estado, value: cantidad })
+function contarElementos<K extends keyof TransformadorTabla>(data: TransformadorTabla[], campo: K) {
+  const tipos = contarTipos(data, campo)
+  const totalElementos: { label: string , value: number }[] = []
+
+  for (const key in tipos) {
+    const element = tipos[key];
+    const cantidad = data.filter((item) => item[campo] === element).length
+    totalElementos.push({ label: element.toString(), value: cantidad })
+  }
+  return totalElementos
+}
+
+function sumaColumna(data: TransformadorTabla[], campo: keyof TransformadorTabla) {
+
+  const suma = data.reduce((acc, item) => {
+    return acc + parseFloat(item[campo].toString())
+  }, 0)
+
+  return suma
+}
+
+function sumaColumnaPorTipo<K extends keyof TransformadorTabla>(
+  data: TransformadorTabla[], 
+  campo: K, 
+  columna: keyof TransformadorTabla,
+  tipo: string, 
+  campo2?: keyof TransformadorTabla,
+  tipo2?: string,
+) {
+
+  let dataFiltrada = data.filter((item) => item[campo] === tipo)
+
+  if (tipo2 && campo2) {
+    dataFiltrada = dataFiltrada.filter((item) => item[campo2] === tipo2)
   }
 
-  return estadosTransformadores
+  const suma = dataFiltrada.reduce((acc, item) => {
+    return acc + parseFloat(item[columna].toString())
+  }, 0)
+
+  return suma
 }
 
-function totalTransformadores (data: TransformadorTabla[]) {
-  const datosTotalTransformadores: { label: string, value: number }[] = []
-  datosTotalTransformadores.push({ label: "Total", value: data.length })
-
-
-  return datosTotalTransformadores
-}
-
-export { dataFilter, datosEstados, datosEstadoTransformadores, totalTransformadores }
+export { dataFilter, contarElementos, sumaColumna, sumaColumnaPorTipo }
