@@ -1,5 +1,6 @@
 import CircleTotal from "../../components/graph/CircleTotal"
 import BarHorizontal from "../../components/graph/BarHorizontal"
+import BarPlotDouble from "../../components/graph/BarPlotDouble"
 import useTableStore from "../../service/CurrentTable"
 import { contarElementos, sumaColumna, sumaColumnaPorTipo } from "../../lib/datos"
 import { useEffect, useState } from "react"
@@ -49,8 +50,11 @@ export default function PintarGraficas() {
       </div>
       <div 
         id="estados-transformadores" 
-        className={`pb-5 pt-2 px-2 max-w-65 rounded-md shadow-md col-span-1 md:col-span-2`}>
+        className={`pb-5 pt-2 px-2 rounded-md shadow-md col-span-1 md:col-span-2`}>
         <h1 className="text-center">Potencia Maxima</h1>
+        <div className="flex justify-start items-center h-full">
+          <BarPlotDouble /> 
+        </div>
       </div>
       {/* {data.map((item, index) => (
         <div key={index} className={`pb-5 pt-2 px-2 rounded-md shadow-md col-span-1 ${item % 2 !== 0 ? 'md:col-span-2' : ''}`}>
