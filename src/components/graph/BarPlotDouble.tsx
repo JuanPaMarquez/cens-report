@@ -3,16 +3,19 @@ import * as d3 from "d3";
 
 interface BarPlotDoubleProps {
   data?: { label: string; value1: number; value2: number }[];
+  labels?: { value1: string; value2: string };
   colors?: [string, string];
 }
 
 export default function BarPlotDouble({
   data = [
-    { label: "A", value1: 30, value2: 50 },
-    { label: "B", value1: 80, value2: 40 },
-    { label: "C", value1: 45, value2: 60 },
-    { label: "D", value1: 60, value2: 70 },
+    { label: "FUERA DE OPERACIÓN", value1: 30, value2: 50 },
+    { label: "cosa3sssssssss", value1: 80, value2: 40 },
+    { label: "cosa1sssssssss", value1: 45, value2: 60 },
+    { label: "cosa4dddddddddddd", value1: 60, value2: 70 },
+    { label: "cosa5dddddddddd", value1: 60, value2: 70 },
   ],
+  labels = { value1: "Mineral", value2: "Vegetal"},
   colors = ["#1daade", "#45DC20"], // Colores por defecto
 }: BarPlotDoubleProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -42,7 +45,7 @@ export default function BarPlotDouble({
     if (!data || data.length === 0 || dimensions.width === 0) return;
 
     const { width, height } = dimensions;
-    const margin = { top: 20, right: 30, bottom: 50, left: 50 };
+    const margin = { top: 65, right: 10, bottom: 80, left: 40 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
@@ -84,8 +87,23 @@ export default function BarPlotDouble({
     g.append("g")
       .call(d3.axisBottom(x0))
       .attr("transform", `translate(0,${innerHeight})`)
-      .attr("class", "x-axis");
-
+      .attr("class", "x-axis")
+      .selectAll("text")
+      .each(function (d) {
+        const text = d3.select(this);
+        const words = (d as string).split(" "); // Dividir el texto en palabras
+        text.text(null); // Limpiar el texto original
+        words.forEach((word, i) => {
+          text
+            .append("tspan")
+            .text(word)
+            .attr("x", -10)
+            .attr("dy", i ? "1.2em" : 0); // Ajustar la posición vertical de cada línea
+        });
+      })
+      .attr("text-anchor", "end") // Alinear el texto al final
+      .attr("transform", "rotate(-45)") // Rotar el texto completo 45 grados
+      
     // Dibujar barras
     g.selectAll<SVGGElement, { label: string; value1: number; value2: number }>(".group")
       .data(data)
@@ -115,10 +133,40 @@ export default function BarPlotDouble({
       .attr("x", (d) => (x1(d.key) || 0) + x1.bandwidth() / 2)
       .attr("y", (d) => y(d.value) - 5)
       .attr("text-anchor", "middle")
-      .attr("font-size", "10px")
+      .attr("font-size", "11px")
       .attr("fill", "black")
       .text((d) => d.value);
-  }, [data, dimensions, colors]);
+
+    // Crear la leyenda
+    const legend = svg
+      .append("g")
+      .attr("transform", `translate(${margin.left-30}, ${margin.top - 60})`);
+
+    const legendData = [
+      { key: "value1", color: colors[0], label: labels.value1 },
+      { key: "value2", color: colors[1], label: labels.value2 },
+    ];
+
+    legend
+      .selectAll(".legend-item")
+      .data(legendData)
+      .join("g")
+      .attr("class", "legend-item")
+      .attr("transform", (_, i) => `translate(0, ${i * 20})`) // Apilar verticalmente
+      .call((g) => {
+        g.append("rect")
+          .attr("width", 15)
+          .attr("height", 15)
+          .attr("fill", (d) => d.color);
+
+        g.append("text")
+          .attr("x", 20)
+          .attr("y", 12)
+          .attr("text-anchor", "start")
+          .attr("font-size", "12px")
+          .text((d) => d.label);
+      });
+  }, [data, dimensions, colors, labels]);
 
   return (
     <div ref={containerRef} className="w-full h-auto">
