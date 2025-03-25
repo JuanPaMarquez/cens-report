@@ -64,7 +64,7 @@ interface TransformadorCrude {
   'No. serie A': string;
   'No. serie B': string;
   'No. serie C': string;
-  'Número de Subestación': number;
+  'Número de Subestación': string;
   'OBSERVACIONES ': string;
   'OLTC': string;
   'Peso Aceite (Kg)': number;
