@@ -104,31 +104,31 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
 
     // Leyenda
    // Leyenda
-  const legend = svg
-  .append("g")
-  .attr("transform", `translate(${margin.left - 80}, 0)`); // Posicionar la leyenda al lado izquierdo del gráfico
+    const legend = svg
+    .append("g")
+    .attr("transform", `translate(${margin.left - 80}, 0)`); // Posicionar la leyenda al lado izquierdo del gráfico
 
-  const legendItemHeight = 20; // Altura de cada elemento de la leyenda
+    const legendItemHeight = 20; // Altura de cada elemento de la leyenda
 
-  legend
-  .selectAll(".legend-item")
-  .data(data[0]?.values.map((d, i) => ({ label: d.label, color: colors[i] })) || [])
-  .join("g")
-  .attr("class", "legend-item")
-  .attr("transform", (_, i) => `translate(0, ${i * legendItemHeight})`) // Posicionar cada elemento verticalmente
-  .call((g) => {
-    g.append("rect")
-      .attr("width", 15)
-      .attr("height", 15)
-      .attr("fill", (d) => d.color);
+    legend
+    .selectAll(".legend-item")
+    .data(data[0]?.values.map((d, i) => ({ label: d.label, color: colors[i] })) || [])
+    .join("g")
+    .attr("class", "legend-item")
+    .attr("transform", (_, i) => `translate(0, ${i * legendItemHeight})`) // Posicionar cada elemento verticalmente
+    .call((g) => {
+      g.append("rect")
+        .attr("width", 15)
+        .attr("height", 15)
+        .attr("fill", (d) => d.color);
 
-    g.append("text")
-      .attr("x", 20)
-      .attr("y", 12)
-      .attr("text-anchor", "start")
-      .attr("font-size", "12px")
-      .text((d) => d.label);
-});
+      g.append("text")
+        .attr("x", 20)
+        .attr("y", 12)
+        .attr("text-anchor", "start")
+        .attr("font-size", "12px")
+        .text((d) => d.label);
+    });
     // Ejes
     g.append("g")
       .call(d3.axisLeft(y0))
@@ -152,7 +152,7 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
       .data((d) => d.values)
       .join("rect")
       .attr("y", (d) => y1(d.label)!)
-      .attr("x", 0)
+      .attr("x", 0.8)
       .attr("width", (d) => x(d.value))
       .attr("height", y1.bandwidth())
       .attr("fill", (d) => colorScale(d.label) as string);
