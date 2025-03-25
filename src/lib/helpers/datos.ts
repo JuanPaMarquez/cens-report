@@ -77,22 +77,25 @@ function contarElementos<K extends keyof TransformadorTabla>(data: Transformador
   return totalElementos
 }
 
-function sumaColumna(data: TransformadorTabla[], campo: keyof TransformadorTabla) {
-
-  const suma = data.reduce((acc, item) => {
-    return acc + parseFloat(item[campo].toString())
-  }, 0)
-
-  return suma
+function estadosTipos (
+  tableData: TransformadorTabla[], 
+  campoTipos: keyof TransformadorTabla,
+  campoEstados: keyof TransformadorTabla
+) {
+  const tipos = contarElementos(tableData, campoTipos)
+  const estados = contarElementos(tableData, campoEstados)
+  return { tipos, estados }
 }
 
+// sumaColumnaPorTipo(tableData, "Estado", "Potencia Máxima", "OPERACIÓN", "Tipo de Aceite", "MINERAL"))
 function sumaColumnaPorTipo<K extends keyof TransformadorTabla>(
-  data: TransformadorTabla[], 
-  campo: K, 
-  columna: keyof TransformadorTabla,
-  tipo: string, 
-  campo2?: keyof TransformadorTabla,
-  tipo2?: string,
+  data: TransformadorTabla[], // Datos a filtrar
+  campo: K, // Campo especifico a filtrar
+  columna: keyof TransformadorTabla, // Columna de datos a sumar
+  tipo: string, // Indicador de filtro del campo
+  // estos campos es para agregar un filtro adicional
+  campo2?: keyof TransformadorTabla, // Campo especifico a filtrar 2
+  tipo2?: string, // Indicador de filtro del campo 2
 ) {
 
   let dataFiltrada = data.filter((item) => item[campo] === tipo)
@@ -108,4 +111,4 @@ function sumaColumnaPorTipo<K extends keyof TransformadorTabla>(
   return suma
 }
 
-export { dataFilter, contarElementos, sumaColumna, sumaColumnaPorTipo }
+export { dataFilter, contarElementos, sumaColumnaPorTipo, estadosTipos }
