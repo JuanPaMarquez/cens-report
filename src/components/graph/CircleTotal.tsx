@@ -12,7 +12,7 @@ const CircleTotal = ({
     { label: "Inactivos", value: 20},
     { label: "Fallando", value: 30},
   ],
-  colors = ["#45DC20", "#1DC1DE", "#FF5454"], // Colores por defecto
+  colors = ["#1DC1DE", "#45DC20", "#FF5454"], // Colores por defecto
 
 }: CircleTotalProps) => {
 

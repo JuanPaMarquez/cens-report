@@ -1,6 +1,6 @@
-import { GraficasInterface } from "../../utils/useGrafica"
+import { GraficasInterface } from "../../lib/helpers/GraphData"
 
-export default function Grafica({ 
+export default function GraphContainer({ 
   grafica,
 }:{ 
   grafica: GraficasInterface,

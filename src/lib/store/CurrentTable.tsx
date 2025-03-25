@@ -1,14 +1,14 @@
 import { create } from 'zustand';
-import { TransformadorTabla } from '../schemas/transformadoresSchema';
+import { TransformadorTabla } from '../../schemas/transformadoresSchema';
 
 
 interface CurrentTableState {
-  tableData: TransformadorTabla[] | null;
-  setTable: (tableData: TransformadorTabla[] | null) => void;
+  tableData: TransformadorTabla[] | [];
+  setTable: (tableData: TransformadorTabla[] | []) => void;
 }
 
 const useTableStore = create<CurrentTableState>((set) => ({
-  tableData: null,
+  tableData: [],
   setTable: (tableData) => set({ tableData }),
 }));
 

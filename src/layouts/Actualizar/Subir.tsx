@@ -1,8 +1,8 @@
 import * as XLSX from 'xlsx'
 import { useState } from "react"
-import { dataFilter } from '../../lib/datos'
+import { dataFilter } from '../../lib/helpers/datos'
 import { TransformadorCrude } from '../../schemas/transformadoresSchema'
-import useTableStore from '../../service/CurrentTable'
+import useTableStore from '../../lib/store/CurrentTable'
 import { useNavigate } from 'react-router'
 
 export default function Subir() {

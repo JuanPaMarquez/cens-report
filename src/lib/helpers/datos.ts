@@ -1,4 +1,4 @@
-import { TransformadorTabla, TransformadorCrude } from "../schemas/transformadoresSchema"
+import { TransformadorTabla, TransformadorCrude } from "../../schemas/transformadoresSchema"
 
 function dataFilter (data: Array<TransformadorCrude>) {
   const transformadores: TransformadorTabla[] = []
