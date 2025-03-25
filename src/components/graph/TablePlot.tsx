@@ -1,23 +1,37 @@
 export default function TablePlot({ 
   data = [
     {
-      label: "Operativos",
-      value: Math.ceil(Math.random() * 100),
+      tipo: "MINERAL",
+      estados: [
+        { estado: "Operativo", suma: Math.ceil(Math.random() * 100) },
+        { estado: "Inactivo", suma: Math.ceil(Math.random() * 100) },
+        { estado: "Fallando", suma: Math.ceil(Math.random() * 100) },
+      ]
     },
     {
-      label: "Inactivos",
-      value: Math.ceil(Math.random() * 100),
-    },
-    {
-      label: "Fallando",
-      value: Math.ceil(Math.random() * 100),
+      tipo: "VEGETAL",
+      estados: [
+        { estado: "Operativo", suma: Math.ceil(Math.random() * 100) },
+        { estado: "Inactivo", suma: Math.ceil(Math.random() * 100) },
+        { estado: "Fallando", suma: Math.ceil(Math.random() * 100) },
+      ]
     }
 ] }) {
   console.log(data)
   
   return (
     <div>
-      <h1>TablePlot</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Estado</th>
+            <th>Cantidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          { /* INFORMACION AQUI */ }
+        </tbody>
+      </table>
     </div>
   )
 }

@@ -29,12 +29,22 @@ function tableDataEstadosTipos (
 ) {
   const { tipos, estados } = estadosTipos(tableData, campoTipos, campoEstados) 
 
+  console.log(tipos)
+
   const arrayEstadosTipos = tipos.map((tipo) => {
     return { tipo: tipo.label, estados: estados.map((estado) => {
       return { estado: estado.label, suma: sumaColumnaPorTipo(tableData, "Estado", "Potencia Máxima", estado.label, "Tipo de Aceite", tipo.label) }
 
     }) }
   })
+
+  // todo: arreglar 
+  arrayEstadosTipos.push({ tipo: "TotalEstados", estados: estados.map((estado) => {
+    return { estado: estado.label, suma: sumaColumnaPorTipo(tableData, "Estado", "Potencia Máxima", estado.label) }
+  }
+  ) })
+
+  console.log(arrayEstadosTipos)
 
   return arrayEstadosTipos
 }
