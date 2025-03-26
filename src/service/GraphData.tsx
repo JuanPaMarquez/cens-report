@@ -3,7 +3,7 @@ import BarHorizontal from "../components/graph/BarHorizontal"
 import BarPlotDouble from "../components/graph/BarPlotDouble"
 import TablePlot from "../components/graph/TablePlot"
 import { contarElementos } from "../lib/helpers/datos"
-import { edadesTransformadores, potenciaMaxima, tableDataEstadosTipos, tranformadoresMayores, transformadoresEstado, transformadoresFabricante, transformadoresFabricanteEstado, transformadoresSubestacion } from "../lib/helpers/especificData"
+import { edadesTransformadores, potenciaMaxima, tableDataEstadosTipos, tranformadoresMayores, transformadoresEstado, transformadoresFabricante, transformadoresFabricanteEstado, transformadoresMonitoreo, transformadoresSubestacion } from "../lib/helpers/especificData"
 import { useEffect, useState } from "react"
 import { TransformadorTabla } from "../schemas/transformadoresSchema"
 import BarHorizontalMulti from "../components/graph/BarHorizontalMulti"
@@ -56,7 +56,7 @@ export function GraphData({ tableData }: { tableData: TransformadorTabla[] }) {
         title: "Potencia Maxima",
         Component: TablePlot,
         data: tableDataEstadosTipos(tableData, "Tipo de Aceite", "Estado"),
-        styles: "md:col-span-2 lg:col-span-3"
+        styles: "md:col-span-2 lg:col-span-3 xl:col-span-4 2xl:col-span-5"
       },
       {
         id: "transformadores-estados",
@@ -110,8 +110,15 @@ export function GraphData({ tableData }: { tableData: TransformadorTabla[] }) {
       {
         id: "transformadores-subestacion",
         title: "Transformadores por Subestación",
-        Component: BarHorizontalMulti,
+        Component: BarHorizontalMulti, 
         data: transformadoresSubestacion(tableData),
+        styles: "md:col-span-2"
+      },
+      {
+        id: "transformadores-subestacion-monitoreo",
+        title: "Transformadores con Monitoreo en linea",
+        Component: BarHorizontalMulti, 
+        data: transformadoresMonitoreo(tableData),
         styles: "md:col-span-2"
       },
     ])

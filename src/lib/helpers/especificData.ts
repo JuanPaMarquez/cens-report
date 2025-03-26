@@ -75,6 +75,25 @@ function transformadoresSubestacion (data: TransformadorTabla[]) {
 
 }
 
+function transformadoresMonitoreo (data: TransformadorTabla[]) {
+  const dataCleaned = data.filter((transformador) => transformador["Monitoreo en Línea"] === "SI")
+
+  const tipoMonitoreo = contarElementos(dataCleaned, "Tipo")
+  const subestaciones = contarElementos(dataCleaned, "Subestacion")
+
+  const subestacionesTipo = subestaciones.map((subestacion) => {
+    const tipoSubestacion = tipoMonitoreo.map((tipo) => {
+      return {
+        label: tipo.label,
+        value: dataCleaned.filter((transformador) => transformador.Tipo === tipo.label && transformador.Subestacion === subestacion.label).length
+      }
+    })
+    return { category: subestacion.label, values: tipoSubestacion }
+  })
+
+  return subestacionesTipo.sort((a, b) => b.values.reduce((acc, val) => acc + val.value, 0) - a.values.reduce((acc, val) => acc + val.value, 0))
+}
+
 function transformadoresEstado (data: TransformadorTabla[]){
   const estados = contarElementos(data, "Estado")
 
@@ -154,5 +173,6 @@ export {
   edadesTransformadores,
   tranformadoresMayores,
   transformadoresFabricante,
-  transformadoresFabricanteEstado
+  transformadoresFabricanteEstado,
+  transformadoresMonitoreo
 }

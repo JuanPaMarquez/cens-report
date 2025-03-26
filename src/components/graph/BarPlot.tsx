@@ -19,6 +19,7 @@ const BarPlot = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const height = 280;
 
   const colorScale = d3
     .scaleOrdinal<string>()
@@ -47,7 +48,7 @@ const BarPlot = ({
   useEffect(() => {
     if (!data || data.length === 0 || dimensions.width === 0) return;
 
-    const { width, height } = dimensions;
+    const { width } = dimensions;
 
     // Ajustar márgenes para maximizar el área del gráfico
     const margin = { top: 20, right: 20, bottom: 50, left: 40 };
@@ -115,10 +116,10 @@ const BarPlot = ({
   }, [data, dimensions, colorScale]);
 
   return (
-    <div ref={containerRef} className="w-full h-82">
+    <div ref={containerRef} className="w-full h-full">
       <svg
         ref={svgRef}
-        viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+        viewBox={`0 0 ${dimensions.width} ${height+30}`}
         preserveAspectRatio="xMinYMin meet"
         className="w-full h-full"
       ></svg>
