@@ -11,7 +11,6 @@ function dataFilter (data: Array<TransformadorCrude>) {
   const transformadores: TransformadorTabla[] = []
   for (const key in data) {
     const element = data[key];
-    // console.log("Claves del elemento:", Object.keys(element)); // Ver todas las claves del objeto
     const transformador: TransformadorTabla = {
       "idHistorial": 0,
       "TR": element["TR"]?.toString() || "",

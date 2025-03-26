@@ -17,7 +17,6 @@ export default function TablePlot({
       ]
     }
 ] }) {
-  console.log(data)
   
   return (
     <div className="overflow-x-auto w-full">

@@ -114,8 +114,6 @@ function edadesTransformadores (data: TransformadorTabla[]) {
   const data30 = data.filter(e => parseInt(e["Edad Trafo"]) > 20 && parseInt(e["Edad Trafo"]) <= 30)
   const data40 = data.filter(e => parseInt(e["Edad Trafo"]) > 30)
 
-  const edades = contarElementos(data, "Edad Trafo")
-  console.log(edades)
   return [
     { label: "De 0 a 10 años", value: data10.length },
     { label: "De 10 a 20 años", value: data20.length },
@@ -156,7 +154,6 @@ function transformadoresFabricanteEstado (data: TransformadorTabla[], estado: st
 
   const fabricantesEstados = fabricantes.map((fabricante) => {
     const dataFiltered = data.filter((transformador) => transformador.FABRICANTE === fabricante.label && transformador.Estado === estado)
-    console.log(dataFiltered)
     const dataFilteredEstado1 = dataFiltered.filter((transformador) => transformador["Tipo de Aceite"] === tipo1).length
     const dataFilteredEstado2 = dataFiltered.filter((transformador) => transformador["Tipo de Aceite"] === tipo2).length
     return { label: fabricante.label, value1: dataFilteredEstado1, value2: dataFilteredEstado2 }

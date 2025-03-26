@@ -21,9 +21,9 @@ export default function Subir() {
         
         const workbook = XLSX.read(data, { type: 'array' });
   
-        const sheetName = workbook.SheetNames[0];
+        // const sheetName = workbook.SheetNames;
   
-        const worksheet = workbook.Sheets[sheetName];
+        const worksheet = workbook.Sheets["CARACTERISTICAS GENERALES"];
         
         if (worksheet['!ref']) {
           const recorted = worksheet['!ref'].split(':')
