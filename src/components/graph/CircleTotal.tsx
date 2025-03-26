@@ -20,27 +20,6 @@ const CircleTotal = ({
   const svgRef = useRef<SVGSVGElement | null>(null);
   const width = 250; // Dimensiones fijas
   const height = 320;
-  
-  // const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-
-  // useEffect(() => {
-  //   // Usar ResizeObserver para actualizar las dimensiones del contenedor
-  //   const resizeObserver = new ResizeObserver((entries) => {
-  //     if (entries[0]) {
-  //       const { width } = entries[0].contentRect;
-  //       const height = width; // Mantener un gráfico cuadrado
-  //       setDimensions({ width, height });
-  //     }
-  //   });
-
-  //   if (containerRef.current) {
-  //     resizeObserver.observe(containerRef.current);
-  //   }
-
-  //   return () => {
-  //     resizeObserver.disconnect();
-  //   };
-  // }, []);
 
   useEffect(() => {
     if (!data || data.length === 0) return;

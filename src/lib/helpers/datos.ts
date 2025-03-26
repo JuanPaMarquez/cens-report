@@ -7,6 +7,13 @@ function getDataLocalStorage() {
   return [];
 }
 
+function getDataTimeLocalStorage() {
+  if (window.localStorage.getItem('dataTime')) {
+    return window.localStorage.getItem('dataTime') || '';
+  }
+  return '';
+}
+
 function dataFilter (data: Array<TransformadorCrude>) {
   const transformadores: TransformadorTabla[] = []
   for (const key in data) {
@@ -117,4 +124,4 @@ function sumaColumnaPorTipo<K extends keyof TransformadorTabla>(
   return suma
 }
 
-export { dataFilter, contarElementos, sumaColumnaPorTipo, estadosTipos, getDataLocalStorage }
+export { dataFilter, contarElementos, sumaColumnaPorTipo, estadosTipos, getDataLocalStorage, getDataTimeLocalStorage }

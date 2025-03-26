@@ -32,9 +32,6 @@ export default function Subir() {
   
         const json: TransformadorCrude[] = XLSX.utils.sheet_to_json(worksheet);
         setTable(dataFilter(json))
-        if (window.localStorage.getItem('tableData')) {
-          window.localStorage.removeItem('tableData')
-        }
         window.localStorage.setItem('tableData', JSON.stringify(dataFilter(json)));
       }
       reader.readAsArrayBuffer(file);
@@ -44,6 +41,8 @@ export default function Subir() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (tableData) {
+      const dataTime = new Date().toISOString()
+      window.localStorage.setItem('dataTime', dataTime)
       navegar('/dashboard')
     } else {
       console.log("no hay datos por subir")
