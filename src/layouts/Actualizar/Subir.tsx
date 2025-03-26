@@ -32,6 +32,10 @@ export default function Subir() {
   
         const json: TransformadorCrude[] = XLSX.utils.sheet_to_json(worksheet);
         setTable(dataFilter(json))
+        if (window.localStorage.getItem('tableData')) {
+          window.localStorage.removeItem('tableData')
+        }
+        window.localStorage.setItem('tableData', JSON.stringify(dataFilter(json)));
       }
       reader.readAsArrayBuffer(file);
     }

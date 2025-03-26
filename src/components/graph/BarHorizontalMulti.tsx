@@ -145,12 +145,13 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
       .attr("class", "group")
       .attr("transform", (d) => `translate(0,${y0(d.category)})`);
 
+    // Dibujar barras
     groups
       .selectAll("rect")
-      .data((d) => d.values)
+      .data((d) => d.values.filter((v) => v.value > 0)) // Filtrar valores mayores a 0
       .join("rect")
       .attr("y", (d) => y1(d.label)!)
-      .attr("x", 0.8)
+      .attr("x", 0)
       .attr("width", (d) => x(d.value))
       .attr("height", y1.bandwidth())
       .attr("fill", (d) => colorScale(d.label) as string);
@@ -158,7 +159,7 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
     // Etiquetas de valores
     groups
       .selectAll("text")
-      .data((d) => d.values)
+      .data((d) => d.values.filter((v) => v.value > 0)) // Filtrar valores mayores a 0
       .join("text")
       .attr("y", (d) => y1(d.label)! + y1.bandwidth() / 2)
       .attr("x", (d) => x(d.value) + 5)

@@ -1,5 +1,12 @@
 import { TransformadorTabla, TransformadorCrude } from "../../schemas/transformadoresSchema"
 
+function getDataLocalStorage() {
+  if (window.localStorage.getItem('tableData')) {
+    return JSON.parse(window.localStorage.getItem('tableData') || '[]');
+  }
+  return [];
+}
+
 function dataFilter (data: Array<TransformadorCrude>) {
   const transformadores: TransformadorTabla[] = []
   for (const key in data) {
@@ -111,4 +118,4 @@ function sumaColumnaPorTipo<K extends keyof TransformadorTabla>(
   return suma
 }
 
-export { dataFilter, contarElementos, sumaColumnaPorTipo, estadosTipos }
+export { dataFilter, contarElementos, sumaColumnaPorTipo, estadosTipos, getDataLocalStorage }

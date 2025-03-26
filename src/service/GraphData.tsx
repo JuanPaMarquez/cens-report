@@ -108,18 +108,18 @@ export function GraphData({ tableData }: { tableData: TransformadorTabla[] }) {
         styles: "md:col-span-2"
       },
       {
-        id: "transformadores-subestacion",
-        title: "Transformadores por Subestación",
-        Component: BarHorizontalMulti, 
-        data: transformadoresSubestacion(tableData),
-        styles: "md:col-span-2"
-      },
-      {
         id: "transformadores-subestacion-monitoreo",
         title: "Transformadores con Monitoreo en linea",
         Component: BarHorizontalMulti, 
         data: transformadoresMonitoreo(tableData),
         styles: "md:col-span-2"
+      },
+      {
+        id: "transformadores-subestacion",
+        title: "Transformadores por Subestación",
+        Component: BarHorizontalMulti, 
+        data: transformadoresSubestacion(tableData),
+        styles: "md:col-span-2 "
       },
     ])
   }, [ tableData ])
