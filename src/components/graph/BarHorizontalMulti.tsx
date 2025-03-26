@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import * as d3 from "d3";
 
 interface BarHorizontalMultiProps {
@@ -47,11 +48,22 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [selected, setSelected] = useState<string>("Todos");
 
+  // Calcular los datos filtrados globalmente
+  const filteredData = useMemo(() => {
+    console.log("entro")
+    return selected === "Todos"
+      ? data
+      : data.filter((d) => d.values.some((value) => value.label === selected && value.value > 0));
+  }, [selected, data]);
+
+  console.log("Selected:", selected);
+  console.log("Filtered Data:", filteredData);
+
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       if (entries[0]) {
         const { width } = entries[0].contentRect;
-        const height = data.length * 80 + 50; // Ajustar la altura según la cantidad de categorías y espacio para la leyenda
+        const height = filteredData.length * 80 + 200; // Ajustar la altura según la cantidad de categorías y espacio para la leyenda
         setDimensions({ width, height });
       }
     });
@@ -63,33 +75,22 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
     return () => {
       resizeObserver.disconnect();
     };
-  }, [data.length]);
-
-  // useEffect(() => {
-  //   // Recalcular la altura en función de las categorías visibles
-  //   const filteredData =
-  //     selected === "Todos" ? data : data.filter((d) => d.category === selected);
-  //   const height = filteredData.length * 80 + 50; // Ajustar la altura según las categorías visibles
-  //   setDimensions((prev) => ({ ...prev, height }));
-  // }, [selected, data]);
+  }, [filteredData]);    
 
   useEffect(() => {
     if (!dimensions.width || !dimensions.height || data.length === 0) return;
-
+  
     const { width, height } = dimensions;
     const margin = { top: 100, right: 30, bottom: 50, left: 100 }; // Espacio adicional para la leyenda
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
-
+  
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
-
+  
     const g = svg
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
-
-    const filteredData = 
-      selected === "Todos" ? data : data.filter((d) => d.category === selected)
 
     // Escalas
     const y0 = d3
@@ -97,32 +98,32 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
       .domain(filteredData.map((d) => d.category))
       .range([0, innerHeight])
       .padding(0.2);
-
+  
     const y1 = d3
       .scaleBand()
       .domain(filteredData[0]?.values.map((d) => d.label) || [])
       .range([0, y0.bandwidth()])
       .padding(0.1);
-
+  
     const x = d3
       .scaleLinear()
       .domain([0, d3.max(filteredData, (d) => d3.max(d.values, (v) => v.value)) || 0])
       .nice()
       .range([0, innerWidth]);
-
+  
     const colorScale = d3
       .scaleOrdinal<string>()
       .domain(filteredData.flatMap((d) => d.values.map((v) => v.label)))
       .range(colors as string[]);
-
+  
     // Tooltip
     const tooltip = d3.select(tooltipRef.current);
-
+  
     // Leyenda
     const legend = svg
       .append("g")
       .attr("transform", `translate(${margin.left - 80}, 0)`); // Posicionar la leyenda al lado izquierdo del gráfico
-
+  
     legend
       .selectAll(".legend-item")
       .data(data[0]?.values.map((d, i) => ({ label: d.label, color: colors[i] })) || [])
@@ -134,7 +135,7 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
           .attr("width", 15)
           .attr("height", 15)
           .attr("fill", (d) => d.color);
-
+  
         g.append("text")
           .attr("x", 20)
           .attr("y", 12)
@@ -142,17 +143,17 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
           .attr("font-size", "10px")
           .text((d) => d.label);
       });
-
+  
     // Ejes
     g.append("g")
       .call(d3.axisLeft(y0))
       .attr("class", "y-axis");
-
+  
     g.append("g")
       .call(d3.axisBottom(x).ticks(5))
       .attr("transform", `translate(0,${innerHeight})`)
       .attr("class", "x-axis");
-
+  
     // Dibujar barras
     const groups = g
       .selectAll(".group")
@@ -160,7 +161,7 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
       .join("g")
       .attr("class", "group")
       .attr("transform", (d) => `translate(0,${y0(d.category)})`);
-
+  
     groups
       .selectAll("rect")
       .data((d) => d.values)
@@ -186,7 +187,7 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
       .on("mouseout", () => {
         tooltip.style("opacity", 0);
       });
-
+  
     // Etiquetas de valores
     groups
       .selectAll("text")
@@ -197,7 +198,7 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
       .attr("alignment-baseline", "middle")
       .attr("font-size", "10px")
       .text((d) => d.value);
-  }, [data, dimensions, colors, selected]);
+  }, [dimensions, colors, selected, data]);
 
   return (
     <div ref={containerRef} className="w-full h-auto relative">
@@ -207,11 +208,13 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
         onChange={(e) => setSelected(e.target.value)}
       >
         <option value="Todos">Todas las categorías</option>
-        {data.map((d) => (
-          <option key={d.category} value={d.category}>
-            {d.category}
-          </option>
-        ))}
+        {Array.from(new Set(data.flatMap((d) => d.values.map((value) => value.label)))).map(
+          (label) => (
+        <option key={label} value={label}>
+          {label}
+        </option>
+          )
+        )}
       </select>
       <div
         ref={tooltipRef}
