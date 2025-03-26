@@ -43,6 +43,7 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
@@ -102,31 +103,34 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
       .domain(data[0]?.values.map((d) => d.label) || [])
       .range(colors);
 
-    // Leyenda
-   // Leyenda
-    const legend = svg
-    .append("g")
-    .attr("transform", `translate(${margin.left - 80}, 0)`); // Posicionar la leyenda al lado izquierdo del gráfico
-    
-    legend
-    .selectAll(".legend-item")
-    .data(data[0]?.values.map((d, i) => ({ label: d.label, color: colors[i] })) || [])
-    .join("g")
-    .attr("class", "legend-item")
-    .attr("transform", (_, i) => `translate(0, ${i * 15})`) // Posicionar cada elemento verticalmente
-    .call((g) => {
-      g.append("rect")
-        .attr("width", 15)
-        .attr("height", 15)
-        .attr("fill", (d) => d.color);
+    // Tooltip
+    const tooltip = d3.select(tooltipRef.current);
 
-      g.append("text")
-        .attr("x", 20)
-        .attr("y", 12)
-        .attr("text-anchor", "start")
-        .attr("font-size", "10px")
-        .text((d) => d.label);
-    });
+    // Leyenda
+    const legend = svg
+      .append("g")
+      .attr("transform", `translate(${margin.left - 80}, 0)`); // Posicionar la leyenda al lado izquierdo del gráfico
+
+    legend
+      .selectAll(".legend-item")
+      .data(data[0]?.values.map((d, i) => ({ label: d.label, color: colors[i] })) || [])
+      .join("g")
+      .attr("class", "legend-item")
+      .attr("transform", (_, i) => `translate(0, ${i * 15})`) // Posicionar cada elemento verticalmente
+      .call((g) => {
+        g.append("rect")
+          .attr("width", 15)
+          .attr("height", 15)
+          .attr("fill", (d) => d.color);
+
+        g.append("text")
+          .attr("x", 20)
+          .attr("y", 12)
+          .attr("text-anchor", "start")
+          .attr("font-size", "10px")
+          .text((d) => d.label);
+      });
+
     // Ejes
     g.append("g")
       .call(d3.axisLeft(y0))
@@ -145,21 +149,36 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
       .attr("class", "group")
       .attr("transform", (d) => `translate(0,${y0(d.category)})`);
 
-    // Dibujar barras
     groups
       .selectAll("rect")
-      .data((d) => d.values.filter((v) => v.value > 0)) // Filtrar valores mayores a 0
+      .data((d) => d.values)
       .join("rect")
       .attr("y", (d) => y1(d.label)!)
       .attr("x", 0)
       .attr("width", (d) => x(d.value))
       .attr("height", y1.bandwidth())
-      .attr("fill", (d) => colorScale(d.label) as string);
+      .attr("fill", (d) => colorScale(d.label) as string)
+      .on("mouseover", (_, d) => {
+        tooltip
+          .style("opacity", 1)
+          .html(`Leyenda: ${d.label}`); // Mostrar el texto de la leyenda
+      })
+      .on("mousemove", (event) => {
+        const containerBounds = containerRef.current?.getBoundingClientRect();
+        if (containerBounds) {
+          tooltip
+            .style("left", `${event.clientX - containerBounds.left + 10}px`)
+            .style("top", `${event.clientY - containerBounds.top - 20}px`);
+        }
+      })
+      .on("mouseout", () => {
+        tooltip.style("opacity", 0);
+      });
 
     // Etiquetas de valores
     groups
       .selectAll("text")
-      .data((d) => d.values.filter((v) => v.value > 0)) // Filtrar valores mayores a 0
+      .data((d) => d.values)
       .join("text")
       .attr("y", (d) => y1(d.label)! + y1.bandwidth() / 2)
       .attr("x", (d) => x(d.value) + 5)
@@ -169,7 +188,12 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
   }, [data, dimensions, colors]);
 
   return (
-    <div ref={containerRef} className="w-full h-auto">
+    <div ref={containerRef} className="w-full h-auto relative">
+      <div
+        ref={tooltipRef}
+        className="absolute bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 pointer-events-none"
+        style={{ position: "absolute" }}
+      ></div>
       <svg
         ref={svgRef}
         viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
