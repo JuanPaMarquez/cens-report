@@ -14,7 +14,7 @@ const BarPlot = ({
     { label: "example", value: Math.ceil(Math.random() * 10) },
     { label: "label", value: Math.ceil(Math.random() * 10) },
   ], // Datos por defecto
-  colors = ["#79FF58", "#54C9FF", "#FF5954"], // Colores por defecto
+  colors = ["#54C9FF"], // Colores por defecto
 }: BarPlotProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -86,7 +86,10 @@ const BarPlot = ({
       .attr("transform", `translate(0,${innerHeight})`)
       .attr("class", "x-axis")
       .selectAll("text")
-      .style("text-anchor", "middle");
+      .attr("transform", "rotate(-45)")
+      .attr("text-anchor", "end")
+      .attr("dx", "-0.5em")
+      .attr("dy", "0.1em");
 
     // Dibujar barras
     g.selectAll(".bar")
@@ -107,11 +110,12 @@ const BarPlot = ({
       .attr("x", (d) => (xScale(d.label) || 0) + xScale.bandwidth() / 2)
       .attr("y", (d) => yScale(d.value) - 5)
       .attr("text-anchor", "middle")
+      .attr("font-size", "10px")
       .text((d) => d.value);
   }, [data, dimensions, colorScale]);
 
   return (
-    <div ref={containerRef} className="w-full h-auto">
+    <div ref={containerRef} className="w-full h-82">
       <svg
         ref={svgRef}
         viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}

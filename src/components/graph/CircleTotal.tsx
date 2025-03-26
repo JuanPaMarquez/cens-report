@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import * as d3 from "d3";
 
 interface CircleTotalProps {
@@ -18,32 +18,32 @@ const CircleTotal = ({
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const width = 250; // Dimensiones fijas
+  const height = 320;
   
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  // const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  // useEffect(() => {
+  //   // Usar ResizeObserver para actualizar las dimensiones del contenedor
+  //   const resizeObserver = new ResizeObserver((entries) => {
+  //     if (entries[0]) {
+  //       const { width } = entries[0].contentRect;
+  //       const height = width; // Mantener un gráfico cuadrado
+  //       setDimensions({ width, height });
+  //     }
+  //   });
+
+  //   if (containerRef.current) {
+  //     resizeObserver.observe(containerRef.current);
+  //   }
+
+  //   return () => {
+  //     resizeObserver.disconnect();
+  //   };
+  // }, []);
 
   useEffect(() => {
-    // Usar ResizeObserver para actualizar las dimensiones del contenedor
-    const resizeObserver = new ResizeObserver((entries) => {
-      if (entries[0]) {
-        const { width } = entries[0].contentRect;
-        const height = width; // Mantener un gráfico cuadrado
-        setDimensions({ width, height });
-      }
-    });
-
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-    }
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!data || data.length === 0 || dimensions.width === 0) return;
-
-    const { width, height } = dimensions;
+    if (!data || data.length === 0) return;
     const radius = Math.min(width, height) / 2;
     const innerRadius = radius * 0.6; // Radio interno para el hueco
 
@@ -67,7 +67,7 @@ const CircleTotal = ({
     // Crear el grupo principal
     const g = svg
       .append("g")
-      .attr("transform", `translate(${width / 2}, ${height - 50})`);
+      .attr("transform", `translate(125, ${height - 130})`);
 
     // Crear escala de colores
     const colorScale = d3
@@ -126,15 +126,17 @@ const CircleTotal = ({
           .attr("font-size", "12px")
           .text((d) => `${d.label}`);
       });
-  }, [data, dimensions, colors]);
+  }, [data, colors]);
 
   return (
-    <div ref={containerRef} className="w-full h-auto flex justify-center items-center">
+    <div ref={containerRef} className="w-full h-65 flex justify-center items-center">
       <svg
         ref={svgRef}
-        viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+        viewBox={`0 0 ${width} ${height}`}
+        width={`${width}`}
+        height={`${height}`}
         preserveAspectRatio="xMinYMin meet"
-        className="w-full h-80"
+        className="w-full h-full"
       ></svg>
     </div>
   );

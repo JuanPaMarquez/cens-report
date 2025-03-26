@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 
 export default function CirclePlot({
   data = [
@@ -8,36 +8,17 @@ export default function CirclePlot({
     { label: "Fallando", value: Math.ceil(Math.random() * 100) },
   ],
 }) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
+  // Memorizar la escala de colores
   const color = d3
-    .scaleOrdinal<string>(["#79FF58", "#54C9FF", "#FF5954"])
+    .scaleOrdinal<string>()
     .domain(data.map((d) => d.label))
+    .range(d3.schemeSet1);
 
   useEffect(() => {
-    // Usar ResizeObserver para actualizar las dimensiones del contenedor
-    const resizeObserver = new ResizeObserver((entries) => {
-      if (entries[0]) {
-        const { width, height } = entries[0].contentRect;
-        setDimensions({ width, height });
-      }
-    });
-
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-    }
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (dimensions.width === 0 || dimensions.height === 0) return;
-
-    const { width, height } = dimensions;
+    const width = 250; // Dimensiones fijas
+    const height = 300;
     const radius = Math.min(width, height) / 2;
 
     // Crear el generador de gráficos de torta
@@ -74,29 +55,29 @@ export default function CirclePlot({
       .join("text")
       .attr("transform", (d) => `translate(${arc.centroid(d)})`)
       .attr("text-anchor", "middle")
-      .attr("font-size", "12px")
-      .attr("fill", "black")
+      .attr("font-size", "13px")
+      .attr("fill", "white")
       .text((d) => d.data.value);
-  }, [dimensions, data, color]);
+  }, [data, color]);
 
   return (
-    <div ref={containerRef} className="w-full h-full flex flex-row-reverse items-center relative md:pt-10">
+    <div className="w-full h-100 flex flex-row-reverse items-center relative md:pt-10">
       <svg
         ref={svgRef}
-        viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
-        width="90%"
-        height="90%"
+        viewBox="0 0 250 300"
+        width="250"
+        height="300"
       ></svg>
       <div className="flex flex-col flex-wrap justify-center mt-4 absolute left-0 top-0">
         {data.map((d, i) => (
-          <div key={i} className="flex mr-4 ">
+          <div key={i} className="flex mr-4">
             <div
               className="w-4 h-4 mr-2"
               style={{ backgroundColor: color(d.label) }}
             ></div>
             <span className="text-[10px]">{d.label}</span>
-          </div>)
-        )}
+          </div>
+        ))}
       </div>
     </div>
   );

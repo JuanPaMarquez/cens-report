@@ -21,6 +21,7 @@ export default function BarPlotDouble({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const height = 300;
 
   useEffect(() => {
     // Usar ResizeObserver para actualizar las dimensiones del contenedor
@@ -44,7 +45,7 @@ export default function BarPlotDouble({
   useEffect(() => {
     if (!data || data.length === 0 || dimensions.width === 0) return;
 
-    const { width, height } = dimensions;
+    const { width } = dimensions;
     const margin = { top: 65, right: 10, bottom: 80, left: 40 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
@@ -169,10 +170,10 @@ export default function BarPlotDouble({
   }, [data, dimensions, colors, labels]);
 
   return (
-    <div ref={containerRef} className="w-full h-auto">
+    <div ref={containerRef} className="w-full h-full">
       <svg
         ref={svgRef}
-        viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+        viewBox={`0 0 ${dimensions.width} ${height}`}
         preserveAspectRatio="xMinYMin meet"
         className="w-full h-full"
       ></svg>

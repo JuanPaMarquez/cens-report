@@ -1,5 +1,5 @@
 import useTableStore from "../../lib/store/CurrentTable"
-import { GraphData } from "../../lib/helpers/GraphData"
+import { GraphData } from "../../service/GraphData"
 import GraphContainer from "./GraphContainer"
 
 export default function Dashboard() {
@@ -13,6 +13,7 @@ export default function Dashboard() {
       <h1 className="pb-2 font-bold">Ultima actualizacion: {currentDate}</h1>
       <div id="table-graficas" className="w-full">
         { tableData.length > 0 
+          // grid grid-flow-dense gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 min-[100rem]:grid-cols-5 items-start
           ? <div className="grid grid-flow-dense gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 min-[100rem]:grid-cols-5 items-start">
               {graficas.map((grafica) => (
                 <GraphContainer key={grafica.id} grafica={grafica} />

@@ -107,15 +107,13 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
     const legend = svg
     .append("g")
     .attr("transform", `translate(${margin.left - 80}, 0)`); // Posicionar la leyenda al lado izquierdo del gráfico
-
-    const legendItemHeight = 20; // Altura de cada elemento de la leyenda
-
+    
     legend
     .selectAll(".legend-item")
     .data(data[0]?.values.map((d, i) => ({ label: d.label, color: colors[i] })) || [])
     .join("g")
     .attr("class", "legend-item")
-    .attr("transform", (_, i) => `translate(0, ${i * legendItemHeight})`) // Posicionar cada elemento verticalmente
+    .attr("transform", (_, i) => `translate(0, ${i * 15})`) // Posicionar cada elemento verticalmente
     .call((g) => {
       g.append("rect")
         .attr("width", 15)
@@ -126,7 +124,7 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
         .attr("x", 20)
         .attr("y", 12)
         .attr("text-anchor", "start")
-        .attr("font-size", "12px")
+        .attr("font-size", "10px")
         .text((d) => d.label);
     });
     // Ejes

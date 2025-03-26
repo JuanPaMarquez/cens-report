@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GraficasInterface } from "../../lib/helpers/GraphData";
+import { GraficasInterface } from "../../service/GraphData";
 import { FaEye, FaEyeSlash  } from "react-icons/fa";
 
 export default function GraphContainer({ 
@@ -11,8 +11,7 @@ export default function GraphContainer({
   const [isVisible, setIsVisible] = useState(true); // Estado para controlar la visibilidad
 
   return (
-    <div 
-      className={`pb-5 pt-2 px-2 rounded-md shadow-sm col-span-1 ${styles}`}>
+    <div className={`pb-5 pt-2 px-2 rounded-md shadow-sm col-span-1 ${styles}`}>
       <div className="flex justify-between items-center p-1">
         <h1 className="text-center">{title}</h1>
         <button 

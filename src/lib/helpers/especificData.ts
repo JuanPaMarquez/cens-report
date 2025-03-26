@@ -89,5 +89,70 @@ function transformadoresEstado (data: TransformadorTabla[]){
   return estadosTipos
 }
 
+function edadesTransformadores (data: TransformadorTabla[]) {
+  const data10 = data.filter(e => parseInt(e["Edad Trafo"]) <= 10)
+  const data20 = data.filter(e => parseInt(e["Edad Trafo"]) > 10 && parseInt(e["Edad Trafo"]) <= 20)
+  const data30 = data.filter(e => parseInt(e["Edad Trafo"]) > 20 && parseInt(e["Edad Trafo"]) <= 30)
+  const data40 = data.filter(e => parseInt(e["Edad Trafo"]) > 30)
 
-export { potenciaMaxima, tableDataEstadosTipos, transformadoresSubestacion, transformadoresEstado }
+  const edades = contarElementos(data, "Edad Trafo")
+  console.log(edades)
+  return [
+    { label: "De 0 a 10 años", value: data10.length },
+    { label: "De 10 a 20 años", value: data20.length },
+    { label: "De 20 a 30 años", value: data30.length },
+    { label: "Mayores de 30", value: data40.length }
+  ].sort((a, b) => b.value - a.value)
+}
+
+function tranformadoresMayores (
+  data: TransformadorTabla[], 
+  campoX: keyof TransformadorTabla, 
+  campoLeyend: keyof TransformadorTabla
+) {
+  const data40 = data.filter(e => parseInt(e["Edad Trafo"]) >= 30)
+  return data40.map(e => {
+    return {
+      label: e[campoX],
+      value: parseInt(e["Edad Trafo"]),
+      category: e[campoLeyend]
+    }
+  }).sort((a, b) => b.value - a.value)
+}
+
+function transformadoresFabricante (data: TransformadorTabla[]) {
+  const fabricantes = contarElementos(data, "FABRICANTE")
+
+  const fabricantesEstados = fabricantes.map((fabricante) => {
+    const dataFiltered = data.filter((transformador) => transformador.FABRICANTE === fabricante.label).length
+    return { label: fabricante.label, value: dataFiltered }
+  })
+
+  return fabricantesEstados.sort((a, b) => b.value - a.value)
+}
+
+function transformadoresFabricanteEstado (data: TransformadorTabla[], estado: string, tipo1: string, tipo2: string) {
+  const dataCleaned = data.filter((transformador) => transformador.Estado === estado)
+  const fabricantes = contarElementos(dataCleaned, "FABRICANTE")
+
+  const fabricantesEstados = fabricantes.map((fabricante) => {
+    const dataFiltered = data.filter((transformador) => transformador.FABRICANTE === fabricante.label && transformador.Estado === estado)
+    console.log(dataFiltered)
+    const dataFilteredEstado1 = dataFiltered.filter((transformador) => transformador["Tipo de Aceite"] === tipo1).length
+    const dataFilteredEstado2 = dataFiltered.filter((transformador) => transformador["Tipo de Aceite"] === tipo2).length
+    return { label: fabricante.label, value1: dataFilteredEstado1, value2: dataFilteredEstado2 }
+  })
+
+  return fabricantesEstados.sort((a,b) => a.label.localeCompare(b.label))
+}
+
+export { 
+  potenciaMaxima, 
+  tableDataEstadosTipos, 
+  transformadoresSubestacion, 
+  transformadoresEstado,
+  edadesTransformadores,
+  tranformadoresMayores,
+  transformadoresFabricante,
+  transformadoresFabricanteEstado
+}
