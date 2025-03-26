@@ -6,12 +6,14 @@ interface CurrentTableState {
   dataTime: string;
   tableData: TransformadorTabla[] | [];
   setTable: (tableData: TransformadorTabla[] | []) => void;
+  setTime: (dataTime: string) => void;
 }
 
 const useTableStore = create<CurrentTableState>((set) => ({
   dataTime: getDataTimeLocalStorage(),
   tableData: getDataLocalStorage(),
   setTable: (tableData) => set({ tableData }),
+  setTime: (dataTime) => set({ dataTime }),
 }));
 
 export default useTableStore;

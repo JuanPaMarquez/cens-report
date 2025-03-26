@@ -39,12 +39,13 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
       ],
     },
   ],
-  colors = ["#1daade", "#45DC20", "#FF5454", "#FFA500", "#000"],
+  colors = d3.schemeObservable10,
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [selected, setSelected] = useState<string>("Todos");
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
@@ -64,6 +65,14 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
     };
   }, [data.length]);
 
+  // useEffect(() => {
+  //   // Recalcular la altura en función de las categorías visibles
+  //   const filteredData =
+  //     selected === "Todos" ? data : data.filter((d) => d.category === selected);
+  //   const height = filteredData.length * 80 + 50; // Ajustar la altura según las categorías visibles
+  //   setDimensions((prev) => ({ ...prev, height }));
+  // }, [selected, data]);
+
   useEffect(() => {
     if (!dimensions.width || !dimensions.height || data.length === 0) return;
 
@@ -79,29 +88,32 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
+    const filteredData = 
+      selected === "Todos" ? data : data.filter((d) => d.category === selected)
+
     // Escalas
     const y0 = d3
       .scaleBand()
-      .domain(data.map((d) => d.category))
+      .domain(filteredData.map((d) => d.category))
       .range([0, innerHeight])
       .padding(0.2);
 
     const y1 = d3
       .scaleBand()
-      .domain(data[0]?.values.map((d) => d.label) || [])
+      .domain(filteredData[0]?.values.map((d) => d.label) || [])
       .range([0, y0.bandwidth()])
       .padding(0.1);
 
     const x = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (d) => d3.max(d.values, (v) => v.value)) || 0])
+      .domain([0, d3.max(filteredData, (d) => d3.max(d.values, (v) => v.value)) || 0])
       .nice()
       .range([0, innerWidth]);
 
     const colorScale = d3
       .scaleOrdinal<string>()
-      .domain(data[0]?.values.map((d) => d.label) || [])
-      .range(colors);
+      .domain(filteredData.flatMap((d) => d.values.map((v) => v.label)))
+      .range(colors as string[]);
 
     // Tooltip
     const tooltip = d3.select(tooltipRef.current);
@@ -144,7 +156,7 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
     // Dibujar barras
     const groups = g
       .selectAll(".group")
-      .data(data)
+      .data(filteredData)
       .join("g")
       .attr("class", "group")
       .attr("transform", (d) => `translate(0,${y0(d.category)})`);
@@ -154,14 +166,14 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
       .data((d) => d.values)
       .join("rect")
       .attr("y", (d) => y1(d.label)!)
-      .attr("x", 0)
+      .attr("x", 0.5)
       .attr("width", (d) => x(d.value))
       .attr("height", y1.bandwidth())
       .attr("fill", (d) => colorScale(d.label) as string)
       .on("mouseover", (_, d) => {
         tooltip
           .style("opacity", 1)
-          .html(`Leyenda: ${d.label}`); // Mostrar el texto de la leyenda
+          .html(`Dato: ${d.label}`); // Mostrar el texto de la leyenda
       })
       .on("mousemove", (event) => {
         const containerBounds = containerRef.current?.getBoundingClientRect();
@@ -185,10 +197,22 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
       .attr("alignment-baseline", "middle")
       .attr("font-size", "10px")
       .text((d) => d.value);
-  }, [data, dimensions, colors]);
+  }, [data, dimensions, colors, selected]);
 
   return (
     <div ref={containerRef} className="w-full h-auto relative">
+      <select
+        className="absolute text-sm top-2 right-2 p-1 rounded"
+        value={selected}
+        onChange={(e) => setSelected(e.target.value)}
+      >
+        <option value="Todos">Todas las categorías</option>
+        {data.map((d) => (
+          <option key={d.category} value={d.category}>
+            {d.category}
+          </option>
+        ))}
+      </select>
       <div
         ref={tooltipRef}
         className="absolute bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 pointer-events-none"

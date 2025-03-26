@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router'
 export default function Subir() {
   const navegar = useNavigate()
   const [fileName, setFileName] = useState<string>('')
-  const { tableData, setTable } = useTableStore()
+  const { tableData, setTable, setTime } = useTableStore()
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -33,6 +33,9 @@ export default function Subir() {
         const json: TransformadorCrude[] = XLSX.utils.sheet_to_json(worksheet);
         setTable(dataFilter(json))
         window.localStorage.setItem('tableData', JSON.stringify(dataFilter(json)));
+        const dataTime = new Date().toISOString()
+        setTime(dataTime)
+        window.localStorage.setItem('dataTime', dataTime)
       }
       reader.readAsArrayBuffer(file);
     }
@@ -41,8 +44,6 @@ export default function Subir() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (tableData) {
-      const dataTime = new Date().toISOString()
-      window.localStorage.setItem('dataTime', dataTime)
       navegar('/dashboard')
     } else {
       console.log("no hay datos por subir")

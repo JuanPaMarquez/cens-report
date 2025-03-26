@@ -15,7 +15,7 @@ const BarHorizontal = ({
     { label: "example", value: Math.ceil(Math.random() * 10) },
     { label: "label", value: Math.ceil(Math.random() * 10) },
   ], // Datos por defecto
-  colors = ["#1daade", "#45DC20", "#FF5454", "#FFA500", "#000"], // Colores por defecto
+  colors = [...d3.schemeTableau10], // Colores por defecto
   setMargin = { top: 20, right: 40, bottom: 20, left: 130 },
 
 }: BarHorizontalProps) => {

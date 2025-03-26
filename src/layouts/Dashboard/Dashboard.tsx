@@ -11,7 +11,7 @@ export default function Dashboard() {
   useEffect(() => {
     const currentDate = dataTime ? new Date(dataTime).toLocaleString() : "No hay datos"
     setDate(currentDate)
-  }, [dataTime, tableData])
+  }, [dataTime])
 
   return (
     <div className="w-full h-full p-3">
@@ -19,7 +19,7 @@ export default function Dashboard() {
       <div id="table-graficas" className="w-full">
         { tableData.length > 0 
           // grid grid-flow-dense gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 min-[100rem]:grid-cols-5 items-start
-          ? <div className="grid grid-flow-dense gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 min-[100rem]:grid-cols-5 items-start">
+          ? <div className="grid grid-flow-dense gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 min-[100rem]:grid-cols-5 items-start">
               {graficas.map((grafica) => (
                 <GraphContainer key={grafica.id} grafica={grafica} />
               ))}
