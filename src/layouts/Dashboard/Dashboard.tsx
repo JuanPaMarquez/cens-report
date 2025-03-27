@@ -14,8 +14,8 @@ export default function Dashboard() {
   }, [dataTime])
 
   return (
-    <div className="w-full h-full p-3">
-      <h1 className="pb-2 font-bold">Ultima actualizacion: {date}</h1>
+    <div className="w-full h-full md:p-3">
+      <h1 className="pb-2 font-bold text-center md:text-left">Ultima actualizacion: {date}</h1>
       <div id="table-graficas" className="w-full">
         { tableData.length > 0 
           // grid grid-flow-dense gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 min-[100rem]:grid-cols-5 items-start
