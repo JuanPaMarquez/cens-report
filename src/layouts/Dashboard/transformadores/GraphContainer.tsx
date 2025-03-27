@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GraficasInterface } from "../../service/GraphData";
+import { GraficasInterface } from "../../../lib/service/GraphData";
 import { FaEye, FaEyeSlash  } from "react-icons/fa";
 
 export default function GraphContainer({ 
