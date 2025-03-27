@@ -43,7 +43,7 @@ export default function ListarExcel() {
           {isDelete ? 'Subir' : 'Eliminar'}
         </button>
       </div>
-      <div className="w-full border border-gray-300 ">
+      <div className="w-full border border-gray-300 overflow-y-auto">
         <table className="w-full border-collapse">
           <thead className="bg-green-700 text-white h-14 sticky top-0 z-100">
             <tr>
