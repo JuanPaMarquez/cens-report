@@ -12,7 +12,7 @@ export default function Dashboard() {
   },[selected, navegar]);
   
   return (
-    <div className="w-full h-full md:p-3 flex flex-col items-end">
+    <div className="w-full h-full md:p-3 flex flex-col items-center">
       <select 
         value={selected}
         onChange={(e) => setSelected(e.target.value)}

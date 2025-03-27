@@ -2,7 +2,7 @@ import CircleTotal from "../../components/graph/CircleTotal"
 import BarHorizontal from "../../components/graph/BarHorizontal"
 import BarPlotDouble from "../../components/graph/BarPlotDouble"
 import TablePlot from "../../components/graph/TablePlot"
-import { contarElementos } from "../../lib/helpers/datos"
+import { contarElementos } from "../helpers/datos"
 import { 
   edadesTransformadores, 
   potenciaMaxima, 
@@ -13,7 +13,7 @@ import {
   transformadoresFabricanteEstado, 
   transformadoresMonitoreo, 
   transformadoresSubestacion 
-} from "../../lib/helpers/especificData"
+} from "../helpers/especificData"
 import { useEffect, useState } from "react"
 import { TransformadorTabla } from "../../schemas/transformadoresSchema"
 import BarHorizontalMulti from "../../components/graph/BarHorizontalMulti"
@@ -35,7 +35,7 @@ export interface GraficasInterface {
   styles?: string // Estilos adicionales
 }
 
-export function GraphData({ tableData }: { tableData: TransformadorTabla[] }) {
+export function GraphTransformadores({ tableData }: { tableData: TransformadorTabla[] }) {
   const [graficas, setGraficas] = useState<GraficasInterface[]>([])
   
   useEffect(() => {

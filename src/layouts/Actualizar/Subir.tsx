@@ -2,13 +2,13 @@ import * as XLSX from 'xlsx'
 import { useState } from "react"
 import { dataFilter } from '../../lib/helpers/datos'
 import { TransformadorCrude } from '../../schemas/transformadoresSchema'
-import useTableStore from '../../lib/store/CurrentTable'
 import { useNavigate } from 'react-router'
+import useTransformadores from '../../lib/store/CurrentTable'
 
 export default function Subir() {
   const navegar = useNavigate()
   const [fileName, setFileName] = useState<string>('')
-  const { tableData, setTable, setTime } = useTableStore()
+  const { tableData, setTable, setTime } = useTransformadores()
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
-import useTableStore from "../../../lib/store/CurrentTable"
-import { GraphData } from "../../../lib/service/GraphData"
+import useTransformadores from "../../../lib/store/CurrentTable"
+import { GraphTransformadores } from "../../../lib/service/GraphTransformadores"
 import GraphContainer from "./GraphContainer"
 
 export default function Transformadores() {
-  const { tableData, dataTime } = useTableStore()
+  const { tableData, dataTime } = useTransformadores()
   const [ date, setDate ] = useState<string>("")
-  const { graficas } = GraphData({ tableData })
+  const { graficas } = GraphTransformadores({ tableData })
 
   useEffect(() => {
     const currentDate = dataTime ? new Date(dataTime).toLocaleString() : "No hay datos"
