@@ -44,7 +44,7 @@ export default function Subir() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (tableData) {
-      navegar('/dashboard')
+      navegar('/dashboard/transformadores')
     } else {
       console.log("no hay datos por subir")
     }

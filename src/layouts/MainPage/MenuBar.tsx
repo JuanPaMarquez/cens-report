@@ -30,17 +30,17 @@ export default function MenuBar({
         <div id="menu" className="text-gray-400 px-2 text-left">
           <span className="px-5 text-bold">MENU</span>
           <div id="menu-options" className="flex flex-col mt-4">
-            <ButtonMenu icon={MdSpaceDashboard}>Dashboard</ButtonMenu>
-            <ButtonMenu icon={MdReport}>Reportes</ButtonMenu>
-            <ButtonMenu icon={MdAddCircle }>Actualizar</ButtonMenu>
+            <ButtonMenu icon={MdSpaceDashboard} link="dashboard/transformadores">Dashboard</ButtonMenu>
+            <ButtonMenu icon={MdReport} link="reportes">Reportes</ButtonMenu>
+            <ButtonMenu icon={MdAddCircle} link="actualizar">Actualizar</ButtonMenu>
           </div>
         </div>
         <div id="otros" className="text-gray-400 px-2 text-left">
           <span className="px-5 text-bold">OTROS</span>
           <div id="menu-options" className="flex flex-col mt-4">
-            <ButtonMenu icon={MdOutlineSettings}>Ajustes</ButtonMenu>
-            <ButtonMenu icon={MdAccountCircle}>Cuenta</ButtonMenu>
-            <ButtonMenu icon={MdHelp}>Ayuda</ButtonMenu>
+            <ButtonMenu icon={MdOutlineSettings} link="ajustes">Ajustes</ButtonMenu>
+            <ButtonMenu icon={MdAccountCircle} link="cuenta">Cuenta</ButtonMenu>
+            <ButtonMenu icon={MdHelp} link="ayuda">Ayuda</ButtonMenu>
           </div>
         </div>
       </div>

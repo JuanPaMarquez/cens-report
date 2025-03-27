@@ -8,14 +8,17 @@ import Ajustes from "../layouts/Ajustes/Ajustes"
 import Cuenta from "../layouts/Cuenta/Cuenta"
 import Ayuda from "../layouts/Ayuda/Ayuda"
 import Login from "../layouts/Login/Login"
+import Transformadores from "../layouts/Dashboard/transformadores/Transformadores"
 
 export default function RoutesApp() {
   return (
     <Routes>
       {/* Rutas de la aplicación */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/" element={<Navigate to="/dashboard/transformadores" replace />} />
 
-      <Route path="/dashboard" element={<MainPage><Dashboard /></MainPage>} />
+      <Route path="/dashboard" element={<MainPage><Dashboard /></MainPage>}>
+        <Route path="transformadores" element={<Transformadores />} />
+      </Route>
       <Route path="/reportes" element={<MainPage><Reportes /></MainPage>} />
       <Route path="/actualizar" element={<MainPage><Actualizar /></MainPage>} />
       <Route path="/ajustes" element={<MainPage><Ajustes /></MainPage>} />

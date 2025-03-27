@@ -42,7 +42,6 @@ export function GraphData({ tableData }: { tableData: TransformadorTabla[] }) {
         title: "Total Transformadores",
         Component: CircleTotal,
         data: contarElementos(tableData, "Tipo de Aceite"),
-        styles: "max-h-96"
       },
       {
         id: "potencia-maxima",
@@ -70,7 +69,6 @@ export function GraphData({ tableData }: { tableData: TransformadorTabla[] }) {
         title: "Edades Transformadores",
         Component: CirclePlot,
         data: edadesTransformadores(tableData),
-        styles: ""
       },
       {
         id: "transformadores-mayores-subestacion",

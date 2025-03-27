@@ -4,16 +4,18 @@ import { useNavigate, useLocation } from "react-router"
 function ButtonMenu ({ 
   children,
   icon: Icon,
+  link
 }:{ 
   children: string,
   icon: React.ElementType,
+  link: string
 }){
   const navegar = useNavigate()
   const { pathname } = useLocation()
   const service = pathname.split('/')[1]
 
   const handleNavigate = () => {
-    navegar(`/${children.toLowerCase()}`)
+    navegar(`/${link}`)
   }
 
   return (
