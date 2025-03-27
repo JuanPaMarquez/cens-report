@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react"
-import useTransformadores from "../../../lib/store/CurrentTable"
+import { useTransformadores } from "../../../lib/store/CurrentTable"
 import { GraphTransformadores } from "../../../lib/service/GraphTransformadores"
 import GraphContainer from "./GraphContainer"
 
 export default function Transformadores() {
-  const { tableData, dataTime } = useTransformadores()
+  const { tableTransformadores, transformadoresTime } = useTransformadores()
   const [ date, setDate ] = useState<string>("")
-  const { graficas } = GraphTransformadores({ tableData })
+  const { graficas } = GraphTransformadores({ tableTransformadores })
 
   useEffect(() => {
-    const currentDate = dataTime ? new Date(dataTime).toLocaleString() : "No hay datos"
+    const currentDate = transformadoresTime ? new Date(transformadoresTime).toLocaleString() : "No hay datos"
     setDate(currentDate)
-  }, [dataTime])
+  }, [transformadoresTime])
 
   return (
     <div>
       <h1 className="pb-2 font-bold text-center md:text-left">Ultima actualizacion: {date}</h1>
         <div id="table-graficas" className="w-full">
-          { tableData.length > 0 
+          { tableTransformadores.length > 0 
             // grid grid-flow-dense gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 min-[100rem]:grid-cols-5 items-start
             ? <div className="grid grid-flow-dense gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 min-[100rem]:grid-cols-5 items-start">
                 {graficas.map((grafica) => (

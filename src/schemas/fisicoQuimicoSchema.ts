@@ -1,4 +1,4 @@
-interface fisicoQuimicoTabla {
+interface FisicoQuimicoTabla {
   'idHistorial': number;
   'AÑO': string; 
   'CONT. HUM': string;
@@ -24,34 +24,9 @@ interface fisicoQuimicoTabla {
   'ASUFRE CORROSIVO': string;
 }
 
-type fisicoQuimicoCrude = {
+type FisicoQuimicoCrude = {
   [key: string]: string; // Permite indexar con cualquier string
 };
 
-// interface fisicoQuimicoCrude {
-//   'idHistorial': number;
-//   'AÑO': string; 
-//   'CONT. HUM.': string;
-//   'DESIDAD RELATIVA': string;
-//   'FACTOR POT.': string;
-//   'FECHA \nMUESTRA': string;
-//   'FRECUENCIA DE LA MUESTRA': string;
-//   'ID TRAFO': string;
-//   'IND. \nCOLOR.': string;
-//   'INDICE \nCALIDAD': string;
-//   'ITEM': string;
-//   'MARCA': string;
-//   'NUM. \nÁCIDO': string;
-//   'NUMERIO DE SERIE': string;
-//   'POT \nMVA' : string;
-//   'REPORTE': string;
-//   'RIGIDEZ DIELECT': string;
-//   'SUBESTACIÓN': string;
-//   'TENSION INTERFACIAL': string;
-//   'TENSIÓN \nKV': string;
-//   'TIPO DE ACEITE': string;
-//   'OBSERVACIÓN DEL LABORATORIO': string;
-//   'ASUFRE CORROSIVO': string;
-// }
 
-export type { fisicoQuimicoCrude, fisicoQuimicoTabla }
+export type { FisicoQuimicoCrude, FisicoQuimicoTabla }

@@ -3,14 +3,15 @@ import { useState } from "react"
 import { dataFilter } from '../../lib/helpers/transformadoresDatos'
 import { TransformadorCrude } from '../../schemas/transformadoresSchema'
 import { useNavigate } from 'react-router'
-import useTransformadores from '../../lib/store/CurrentTable'
+import { useTransformadores, useFisicoQuimico } from '../../lib/store/CurrentTable'
 import { dataFilterFisicoQuimico } from '../../lib/helpers/fisicoQuimicoDatos'
-import { fisicoQuimicoCrude } from '../../schemas/fisicoQuimicoSchema'
+import { FisicoQuimicoCrude } from '../../schemas/fisicoQuimicoSchema'
 
 export default function Subir() {
   const navegar = useNavigate()
   const [fileName, setFileName] = useState<string>('')
-  const { tableData, setTable, setTime } = useTransformadores()
+  const { tableTransformadores, setTableTransformadores, setTransformadoresTime } = useTransformadores()
+  const { tableFisicoQuimico, setTableFisicoQuimico, setFisicoQuimicoTime } = useFisicoQuimico()
   const [selected, setSelected] = useState("transformadores");
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,11 +37,12 @@ export default function Subir() {
           }
     
           const json: TransformadorCrude[] = XLSX.utils.sheet_to_json(worksheet);
-          setTable(dataFilter(json))
-          window.localStorage.setItem('tableData', JSON.stringify(dataFilter(json)));
+          const dataFiltered = dataFilter(json)
+          setTableTransformadores(dataFiltered)
+          window.localStorage.setItem('tableTransformadores', JSON.stringify(dataFiltered));
           const dataTime = new Date().toISOString()
-          setTime(dataTime)
-          window.localStorage.setItem('dataTime', dataTime)
+          setTransformadoresTime(dataTime)
+          window.localStorage.setItem('transformadoresTime', dataTime)
 
         } else if (selected === "fisico-quimico") {
 
@@ -49,10 +51,14 @@ export default function Subir() {
             const recorted = worksheet['!ref'].split(':')
             worksheet['!ref'] = 'A7:' + recorted[1];     
           }
-          console.log("data sin filtrar", XLSX.utils.sheet_to_json(worksheet))
 
-          const json: fisicoQuimicoCrude[] = XLSX.utils.sheet_to_json(worksheet);
-          console.log(dataFilterFisicoQuimico(json))
+          const json: FisicoQuimicoCrude[] = XLSX.utils.sheet_to_json(worksheet);
+          const dataFiltered = dataFilterFisicoQuimico(json)
+          setTableFisicoQuimico(dataFiltered)
+          window.localStorage.setItem('tableFisicoQuimico', JSON.stringify(dataFiltered));
+          const dataTime = new Date().toISOString()
+          setFisicoQuimicoTime(dataTime)
+          window.localStorage.setItem('fisicoQuimicoTime', dataTime)
 
         }
       }
@@ -62,10 +68,12 @@ export default function Subir() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (tableData) {
-      navegar('/dashboard/transformadores')
+    if (tableTransformadores && tableTransformadores.length > 0) {
+      navegar('/dashboard/transformadores');
+    } else if (tableFisicoQuimico && tableFisicoQuimico.length > 0) {
+      navegar('/dashboard/fisico-quimico');
     } else {
-      console.log("no hay datos por subir")
+      console.log("No hay datos por subir");
     }
   }
   

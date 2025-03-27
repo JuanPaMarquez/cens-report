@@ -1,19 +1,19 @@
 import { create } from 'zustand';
-import { TransformadorTabla } from '../../schemas/transformadoresSchema';
 import { getDataLocalStorage, getDataTimeLocalStorage } from '../helpers/datos';
-
-interface UseTransformadoresState {
-  dataTime: string;
-  tableData: TransformadorTabla[] | [];
-  setTable: (tableData: TransformadorTabla[] | []) => void;
-  setTime: (dataTime: string) => void;
-}
+import { UseFisicoQuimicoState, UseTransformadoresState } from '../../schemas/storeSchemas';
 
 const useTransformadores = create<UseTransformadoresState>((set) => ({
-  dataTime: getDataTimeLocalStorage(),
-  tableData: getDataLocalStorage(),
-  setTable: (tableData) => set({ tableData }),
-  setTime: (dataTime) => set({ dataTime }),
+  transformadoresTime: getDataTimeLocalStorage("transformadoresTime"),
+  setTransformadoresTime: (transformadoresTime) => set({ transformadoresTime }),
+  tableTransformadores: getDataLocalStorage("tableTransformadores"),
+  setTableTransformadores: (tableTransformadores) => set({ tableTransformadores }),
 }));
 
-export default useTransformadores;
+const useFisicoQuimico = create<UseFisicoQuimicoState>((set) => ({
+  fisicoQuimicoTime: getDataTimeLocalStorage("fisicoQuimicoTime"),
+  setFisicoQuimicoTime: (fisicoQuimicoTime) => set({ fisicoQuimicoTime }),
+  tableFisicoQuimico: getDataLocalStorage("tableFisicoQuimico"),
+  setTableFisicoQuimico: (tableFisicoQuimico) => set({ tableFisicoQuimico }),
+}));
+
+export { useTransformadores, useFisicoQuimico };

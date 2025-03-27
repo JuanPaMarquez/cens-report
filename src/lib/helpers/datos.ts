@@ -1,15 +1,15 @@
 import { TransformadorTabla } from "../../schemas/transformadoresSchema"
 
-function getDataLocalStorage() {
-  if (window.localStorage.getItem('tableData')) {
-    return JSON.parse(window.localStorage.getItem('tableData') || '[]');
+function getDataLocalStorage(table: string) {
+  if (window.localStorage.getItem(table)) {
+    return JSON.parse(window.localStorage.getItem(table) || '[]');
   }
   return [];
 }
 
-function getDataTimeLocalStorage() {
-  if (window.localStorage.getItem('dataTime')) {
-    return window.localStorage.getItem('dataTime') || '';
+function getDataTimeLocalStorage(table: string) {
+  if (window.localStorage.getItem(table)) {
+    return window.localStorage.getItem(table) || '';
   }
   return '';
 }
