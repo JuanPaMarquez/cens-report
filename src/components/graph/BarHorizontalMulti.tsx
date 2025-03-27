@@ -50,14 +50,10 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
 
   // Calcular los datos filtrados globalmente
   const filteredData = useMemo(() => {
-    console.log("entro")
     return selected === "Todos"
       ? data
       : data.filter((d) => d.values.some((value) => value.label === selected && value.value > 0));
   }, [selected, data]);
-
-  console.log("Selected:", selected);
-  console.log("Filtered Data:", filteredData);
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {

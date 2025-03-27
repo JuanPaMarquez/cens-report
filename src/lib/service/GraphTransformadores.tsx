@@ -13,7 +13,7 @@ import {
   transformadoresFabricanteEstado, 
   transformadoresMonitoreo, 
   transformadoresSubestacion 
-} from "../helpers/especificData"
+} from "../helpers/transformadoresDatos"
 import { useEffect, useState } from "react"
 import { TransformadorTabla } from "../../schemas/transformadoresSchema"
 import BarHorizontalMulti from "../../components/graph/BarHorizontalMulti"
