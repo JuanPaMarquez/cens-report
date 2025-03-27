@@ -8,7 +8,12 @@ import Ajustes from "../layouts/Ajustes/Ajustes"
 import Cuenta from "../layouts/Cuenta/Cuenta"
 import Ayuda from "../layouts/Ayuda/Ayuda"
 import Login from "../layouts/Login/Login"
+// importaciones dashboard
 import Transformadores from "../layouts/Dashboard/transformadores/Transformadores"
+import Fisicoquimico from "../layouts/Dashboard/fisico-quimico/Fisicoquimico"
+import Gases from "../layouts/Dashboard/gases/Gases"
+import Inhibidor from "../layouts/Dashboard/inhibidor/Inhibidor"
+import Furanos from "../layouts/Dashboard/furanos/Furanos"
 
 export default function RoutesApp() {
   return (
@@ -18,6 +23,10 @@ export default function RoutesApp() {
 
       <Route path="/dashboard" element={<MainPage><Dashboard /></MainPage>}>
         <Route path="transformadores" element={<Transformadores />} />
+        <Route path="fisico-quimico" element={<Fisicoquimico />} />
+        <Route path="gases" element={<Gases />} />
+        <Route path="inhibidor" element={<Inhibidor />} />
+        <Route path="furanos" element={<Furanos />} />
       </Route>
       <Route path="/reportes" element={<MainPage><Reportes /></MainPage>} />
       <Route path="/actualizar" element={<MainPage><Actualizar /></MainPage>} />

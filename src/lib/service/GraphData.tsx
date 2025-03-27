@@ -1,15 +1,25 @@
-import CircleTotal from "../components/graph/CircleTotal"
-import BarHorizontal from "../components/graph/BarHorizontal"
-import BarPlotDouble from "../components/graph/BarPlotDouble"
-import TablePlot from "../components/graph/TablePlot"
-import { contarElementos } from "../lib/helpers/datos"
-import { edadesTransformadores, potenciaMaxima, tableDataEstadosTipos, tranformadoresMayores, transformadoresEstado, transformadoresFabricante, transformadoresFabricanteEstado, transformadoresMonitoreo, transformadoresSubestacion } from "../lib/helpers/especificData"
+import CircleTotal from "../../components/graph/CircleTotal"
+import BarHorizontal from "../../components/graph/BarHorizontal"
+import BarPlotDouble from "../../components/graph/BarPlotDouble"
+import TablePlot from "../../components/graph/TablePlot"
+import { contarElementos } from "../../lib/helpers/datos"
+import { 
+  edadesTransformadores, 
+  potenciaMaxima, 
+  tableDataEstadosTipos, 
+  tranformadoresMayores, 
+  transformadoresEstado, 
+  transformadoresFabricante, 
+  transformadoresFabricanteEstado, 
+  transformadoresMonitoreo, 
+  transformadoresSubestacion 
+} from "../../lib/helpers/especificData"
 import { useEffect, useState } from "react"
-import { TransformadorTabla } from "../schemas/transformadoresSchema"
-import BarHorizontalMulti from "../components/graph/BarHorizontalMulti"
-import CirclePlot from "../components/graph/CirclePlot"
-import BarPlotColor from "../components/graph/BarPlotColor"
-import BarProp from "../components/graph/BarPlot"
+import { TransformadorTabla } from "../../schemas/transformadoresSchema"
+import BarHorizontalMulti from "../../components/graph/BarHorizontalMulti"
+import CirclePlot from "../../components/graph/CirclePlot"
+import BarPlotColor from "../../components/graph/BarPlotColor"
+import BarProp from "../../components/graph/BarPlot"
 
 export interface GraficasInterface {
   id: string // Identificador de la grafica

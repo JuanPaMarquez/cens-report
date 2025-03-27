@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import useTableStore from "../../../lib/store/CurrentTable"
-import { GraphData } from "../../../service/GraphData"
-import GraphContainer from "./../GraphContainer"
+import { GraphData } from "../../../lib/service/GraphData"
+import GraphContainer from "./GraphContainer"
 
 export default function Transformadores() {
   const { tableData, dataTime } = useTableStore()
@@ -14,7 +14,7 @@ export default function Transformadores() {
   }, [dataTime])
 
   return (
-    <>
+    <div>
       <h1 className="pb-2 font-bold text-center md:text-left">Ultima actualizacion: {date}</h1>
         <div id="table-graficas" className="w-full">
           { tableData.length > 0 
@@ -29,6 +29,6 @@ export default function Transformadores() {
               </div>
           }
         </div>
-    </>
+    </div>
   )
 }
