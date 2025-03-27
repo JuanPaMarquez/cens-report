@@ -7,8 +7,12 @@ export default function CirclePlot({
     { label: "Inactivos", value: Math.ceil(Math.random() * 100) },
     { label: "Fallando", value: Math.ceil(Math.random() * 100) },
   ],
+  colors = d3.schemeSet1,
 }) {
   const svgRef = useRef<SVGSVGElement | null>(null);
+
+  const width = 320; // Dimensiones fijas
+  const height = 300;
 
   // Memorizar la escala de colores
   const color = d3
@@ -17,9 +21,7 @@ export default function CirclePlot({
     .range(d3.schemeSet1);
 
   useEffect(() => {
-    const width = 250; // Dimensiones fijas
-    const height = 300;
-    const radius = Math.min(width, height) / 2;
+    const radius = Math.min(width-40, height-70) / 2;
 
     // Crear el generador de gráficos de torta
     const pie = d3
@@ -35,10 +37,15 @@ export default function CirclePlot({
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
 
+    const colorScale = d3
+      .scaleOrdinal<string>()
+      .domain(data.map((d) => d.label))
+      .range(colors);
+
     // Crear el grupo principal
     const g = svg
       .append("g")
-      .attr("transform", `translate(${width / 2}, ${height / 2})`);
+      .attr("transform", `translate(${(width + 40) / 2}, ${height - radius - 2})`);
 
     // Dibujar las secciones del gráfico
     g.selectAll("path")
@@ -58,27 +65,42 @@ export default function CirclePlot({
       .attr("font-size", "13px")
       .attr("fill", "white")
       .text((d) => d.data.value);
-  }, [data, color]);
+    // Crear la leyenda fuera del gráfico
+    const legend = svg
+      .append("g")
+      .attr("transform", `translate(0,0)`); // Posicionar la leyenda    
+
+    legend
+      .selectAll(".legend-item")
+      .data(data)
+      .join("g")
+      .attr("class", "legend-item")
+      .attr("transform", (_, i) => `translate(0, ${i * 15})`) // Aumentar espaciado vertical
+      .call((g) => {
+        g.append("rect")
+          .attr("width", 15)
+          .attr("height", 15)
+          .attr("fill", (d) => colorScale(d.label) as string);
+    
+        g.append("text")
+          .attr("x", 20)
+          .attr("y", 12)
+          .attr("text-anchor", "start")
+          .attr("font-size", "14px")
+          .text((d) => `${d.label}`);
+      });
+    
+  }, [data, colors, color]);
 
   return (
-    <div className="w-full h-100 flex flex-row-reverse items-center relative md:pt-10">
+    <div className="w-full h-full flex justify-center relative">
       <svg
         ref={svgRef}
-        viewBox="0 0 250 300"
-        width="250"
-        height="300"
+        viewBox={`0 0 ${width} ${height}`}
+        width={`${width}`}
+        height={`${height}`}
+        className="h-full"
       ></svg>
-      <div className="flex flex-col flex-wrap justify-center mt-4 absolute left-0 top-0">
-        {data.map((d, i) => (
-          <div key={i} className="flex mr-4">
-            <div
-              className="w-4 h-4 mr-2"
-              style={{ backgroundColor: color(d.label) }}
-            ></div>
-            <span className="text-[10px]">{d.label}</span>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }

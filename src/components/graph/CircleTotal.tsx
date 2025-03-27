@@ -18,12 +18,18 @@ const CircleTotal = ({
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const width = 250; // Dimensiones fijas
-  const height = 320;
+  const width = 320; // Dimensiones fijas
+  const height = 300;
+
+  // Crear escala de colores
+  const colorScale = d3
+    .scaleOrdinal<string>()
+    .domain(data.map((d) => d.label))
+    .range(colors);
 
   useEffect(() => {
     if (!data || data.length === 0) return;
-    const radius = Math.min(width, height) / 2;
+    const radius = Math.min(width-40, height-60) / 2;
     const innerRadius = radius * 0.6; // Radio interno para el hueco
 
     // Calcular el total
@@ -46,13 +52,7 @@ const CircleTotal = ({
     // Crear el grupo principal
     const g = svg
       .append("g")
-      .attr("transform", `translate(125, ${height - 130})`);
-
-    // Crear escala de colores
-    const colorScale = d3
-      .scaleOrdinal<string>()
-      .domain(data.map((d) => d.label))
-      .range(colors);
+      .attr("transform", `translate(${(width+40) / 2}, ${height - radius - 2})`);
 
     // Dibujar las secciones del gráfico
     g.selectAll("path")
@@ -105,17 +105,16 @@ const CircleTotal = ({
           .attr("font-size", "12px")
           .text((d) => `${d.label}`);
       });
-  }, [data, colors]);
+  }, [data, colorScale]);
 
   return (
-    <div ref={containerRef} className="w-full h-65 flex justify-center items-center">
+    <div ref={containerRef} className="w-full h-full flex justify-center items-center">
       <svg
         ref={svgRef}
         viewBox={`0 0 ${width} ${height}`}
         width={`${width}`}
         height={`${height}`}
-        preserveAspectRatio="xMinYMin meet"
-        className="w-full h-full"
+        className="h-full"
       ></svg>
     </div>
   );

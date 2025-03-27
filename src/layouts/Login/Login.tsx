@@ -9,7 +9,7 @@ export default function Login() {
 
 
   return (
-    <div id="loginBackground" className="flex flex-col items-center justify-center bg-[url(/fondoLogin.webp)] bg-cover  h-screen">
+    <div id="loginBackground" className="flex flex-col items-center justify-center bg-[url(/fondoLogin.webp)] bg-cover h-screen">
       <div id="loginComponent" className={`max-w-200 h-120 max-[560px]:max-w-80 w-full flex bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300`}>
       <div 
         className={`flex-1 z-8 max-[560px]:hidden transition-transform duration-300 

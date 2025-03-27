@@ -70,7 +70,7 @@ export function GraphData({ tableData }: { tableData: TransformadorTabla[] }) {
         title: "Edades Transformadores",
         Component: CirclePlot,
         data: edadesTransformadores(tableData),
-        styles: "max-h-96"
+        styles: ""
       },
       {
         id: "transformadores-mayores-subestacion",
