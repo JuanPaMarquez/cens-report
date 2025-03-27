@@ -203,7 +203,7 @@ const BarHorizontalMulti: React.FC<BarHorizontalMultiProps> = ({
   return (
     <div ref={containerRef} className="w-full h-auto relative">
       <select
-        className="absolute text-sm top-2 right-2 p-1 rounded"
+        className="absolute text-sm top-2 right-2 p-1 rounded text-right"
         value={selected}
         onChange={(e) => setSelected(e.target.value)}
       >
