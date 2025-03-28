@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useOutlet } from "react-router";
+import { useLocation, useNavigate, useOutlet } from "react-router";
 
 
 export default function Dashboard() {
   const navegar = useNavigate();
   const outlet = useOutlet();
-  const [selected, setSelected] = useState("transformadores");
+  const location = useLocation();
+  const [selected, setSelected] = useState(() => {
+    const path = location.pathname.split('/')[2]; // Obtener la ruta actual
+    return path || "transformadores"; // Si no hay ruta, usar "transformadores" por defecto
+  });
 
   useEffect(() => {
     navegar(`/dashboard/${selected}`);

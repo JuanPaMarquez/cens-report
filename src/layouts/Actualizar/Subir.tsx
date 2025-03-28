@@ -68,9 +68,10 @@ export default function Subir() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (tableTransformadores && tableTransformadores.length > 0) {
+    console.log("select: ", selected)
+    if (selected === "transformadores" && tableTransformadores.length > 0) {
       navegar('/dashboard/transformadores');
-    } else if (tableFisicoQuimico && tableFisicoQuimico.length > 0) {
+    } else if (selected === "fisico-quimico" && tableFisicoQuimico.length > 0) {
       navegar('/dashboard/fisico-quimico');
     } else {
       console.log("No hay datos por subir");
@@ -83,12 +84,12 @@ export default function Subir() {
       <select 
         value={selected}
         onChange={(e) => setSelected(e.target.value)}
-        className=" rounded-md border border-gray-300 shadow-sm m-1 p-2"
+        className="max-w-100 text-center rounded-md border border-gray-300 shadow-sm m-1 p-2"
       >
         <option value="transformadores">Tabla Transformadores</option>
-        <option value="fisico-quimico">Tabla Fisico Quimico</option>
-        <option value="gases">Tabla de Gases</option>
-        <option value="inhibidor-furanos">Tabla Inhibidor/Furanos</option>
+        <option value="fisico-quimico">Tabla Fisico Quimico (ADFQ)</option>
+        <option value="gases">Tabla de Gases (DGA)</option>
+        <option value="inhibidor-furanos">Tabla Inhibidor(INH) / Furanos(FUR) </option>
       </select>
       <form className="flex flex-wrap justify-center items-center gap-2" onSubmit={handleSubmit}>
         <div className="relative flex items-center">
