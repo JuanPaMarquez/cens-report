@@ -8,4 +8,5 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  base: '/' // Asegúrate de que esta sea la ruta base correcta
 })
