@@ -1,4 +1,4 @@
-import { MdSpaceDashboard, MdReport, MdAddCircle, MdOutlineSettings, MdAccountCircle, MdHelp  } from "react-icons/md";
+import { MdSpaceDashboard, MdAddCircle, /* MdReport, MdOutlineSettings, MdAccountCircle, MdHelp */  } from "react-icons/md";
 import {ButtonMenu} from "../../components/ui/Button";
 import { FaChevronCircleLeft } from "react-icons/fa";
 
@@ -31,18 +31,18 @@ export default function MenuBar({
           <span className="px-5 text-bold">MENU</span>
           <div id="menu-options" className="flex flex-col mt-4">
             <ButtonMenu icon={MdSpaceDashboard} link="dashboard/transformadores">Dashboard</ButtonMenu>
-            <ButtonMenu icon={MdReport} link="reportes">Reportes</ButtonMenu>
+            {/* <ButtonMenu icon={MdReport} link="reportes">Reportes</ButtonMenu> */}
             <ButtonMenu icon={MdAddCircle} link="actualizar">Actualizar</ButtonMenu>
           </div>
         </div>
-        <div id="otros" className="text-gray-400 px-2 text-left">
+        {/* <div id="otros" className="text-gray-400 px-2 text-left">
           <span className="px-5 text-bold">OTROS</span>
           <div id="menu-options" className="flex flex-col mt-4">
             <ButtonMenu icon={MdOutlineSettings} link="ajustes">Ajustes</ButtonMenu>
             <ButtonMenu icon={MdAccountCircle} link="cuenta">Cuenta</ButtonMenu>
             <ButtonMenu icon={MdHelp} link="ayuda">Ayuda</ButtonMenu>
           </div>
-        </div>
+        </div> */}
       </div>
       <div id="logo" className="flex justify-center items-center mb-10">
         <img src="/censLogo.webp" className="w-40" alt="logo cens" />
