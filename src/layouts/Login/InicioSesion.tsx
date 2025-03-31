@@ -15,7 +15,7 @@ export default function InicioSesion (){
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("usuario: ",inputUser ,"contraseña: ", inputLock); 
-    navegar('/dashboard')
+    navegar('/dashboard/transformadores')
   }
 
   return (
@@ -49,11 +49,7 @@ export default function InicioSesion (){
             {showPassword ? <IoMdEye className="size-5" /> : <IoMdEyeOff className="size-5" /> }
           </button>)}
         </div>
-        <ButtonLogin 
-          type="submit"  
-        >
-          Ingresar
-        </ButtonLogin>
+        <ButtonLogin type="submit">Ingresar</ButtonLogin>
       </form>
     </>
   )
