@@ -3,11 +3,11 @@ import { useRef, useEffect, useState } from "react";
 
 export default function LinePlot({
   data = [
-    { x: 0, y: Math.random() * 50 },
-    { x: 1, y: Math.random() * 50 },
-    { x: 2, y: Math.random() * 50 },
-    { x: 3, y: Math.random() * 50 },
-    { x: 4, y: Math.random() * 50 },
+    { x: "2014", y: Math.ceil(Math.random() * 50) },
+    { x: "2015", y: Math.ceil(Math.random() * 50) },
+    { x: "2016", y: Math.ceil(Math.random() * 50) },
+    { x: "2017", y: Math.ceil(Math.random() * 50) },
+    { x: "2018", y: Math.ceil(Math.random() * 50) },
   ],
   marginTop = 20,
   marginRight = 20,
@@ -23,7 +23,10 @@ export default function LinePlot({
     const resizeObserver = new ResizeObserver((entries) => {
       if (entries[0]) {
         const { width, height } = entries[0].contentRect;
-        setDimensions({ width, height });
+        setDimensions({
+          width: width || 600, // Valor predeterminado si width es 0
+          height: height || 200, // Valor predeterminado si height es 0
+        });
       }
     });
 
@@ -43,9 +46,10 @@ export default function LinePlot({
 
     // Crear escalas
     const x = d3
-      .scaleLinear()
-      .domain([0, data.length - 1])
-      .range([marginLeft, width - marginRight]);
+      .scalePoint()
+      .domain(data.map((d) => d.x)) // Usar los labels como dominio
+      .range([marginLeft, width - marginRight])
+      .padding(0.5);
 
     const y = d3
       .scaleLinear()
@@ -53,13 +57,28 @@ export default function LinePlot({
       .range([height - marginBottom, marginTop]);
 
     const line = d3
-      .line<{ x: number; y: number }>()
-      .x((_, i) => x(i))
+      .line<{ x: string; y: number }>()
+      .x((d) => x(d.x)!)
       .y((d) => y(d.y));
 
     // Seleccionar el SVG y limpiar contenido previo
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
+
+    // Dibujar líneas horizontales en el fondo
+    svg
+      .append("g")
+      .attr("class", "grid-lines")
+      .selectAll("line")
+      .data(y.ticks(5)) // Dividir en 5 líneas horizontales
+      .join("line")
+      .attr("x1", marginLeft)
+      .attr("x2", width - marginRight)
+      .attr("y1", (d) => y(d))
+      .attr("y2", (d) => y(d))
+      .attr("stroke", "#ADADAD") // Color de las líneas
+      .attr("stroke-width", 1)
+      .attr("stroke-dasharray", "4 4"); // Líneas punteadas
 
     // Agregar ejes
     svg
@@ -78,7 +97,7 @@ export default function LinePlot({
       .datum(data)
       .attr("fill", "none")
       .attr("stroke", "steelblue")
-      .attr("stroke-width", 2)
+      .attr("stroke-width", 3)
       .attr("d", line);
 
     // Dibujar puntos
@@ -86,17 +105,39 @@ export default function LinePlot({
       .selectAll("circle")
       .data(data)
       .join("circle")
-      .attr("cx", (_, i) => x(i))
+      .attr("cx", (d) => x(d.x)!)
       .attr("cy", (d) => y(d.y))
-      .attr("r", 4)
-      .attr("fill", "white")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 1.5);
+      .attr("r", 12) // Aumentar el radio de los puntos
+      .attr("fill", "steelblue")
+      .attr("stroke", "white")
+      .attr("stroke-width", 2);
+
+    // Agregar etiquetas con valores dentro de los puntos
+    svg
+      .selectAll("text.value")
+      .data(data)
+      .join("text")
+      .attr("class", "value")
+      .attr("x", (d) => x(d.x)!)
+      .attr("y", (d) => y(d.y) + 4) // Centrar el texto dentro del punto
+      .attr("text-anchor", "middle")
+      .attr("font-size", "10px")
+      .attr("fill", "white") // Cambiar el color del texto a blanco para contraste
+      .text((d) => (Number.isInteger(d.y) ? d.y : d.y.toFixed(2))); // Mostrar sin decimales si es entero
   }, [dimensions, data, marginBottom, marginLeft, marginRight, marginTop]);
 
   return (
-    <div ref={containerRef} className="w-full h-full">
-      <svg ref={svgRef} width={dimensions.width} height={dimensions.height}></svg>
+    <div
+      ref={containerRef}
+      className="w-full h-full"
+      style={{ height: "100%", width: "100%" }} // Asegurar que ocupe todo el espacio del padre
+    >
+      <svg
+        ref={svgRef}
+        width={dimensions.width}
+        height={dimensions.height}
+        style={{ height: "300px", width: "100%" }} // Asegurar que el SVG ocupe todo el espacio
+      ></svg>
     </div>
   );
 }
