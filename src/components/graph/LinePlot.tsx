@@ -3,11 +3,18 @@ import { useRef, useEffect, useState } from "react";
 
 export default function LinePlot({
   data = [
-    { x: "2014", y: Math.ceil(Math.random() * 50) },
-    { x: "2015", y: Math.ceil(Math.random() * 50) },
-    { x: "2016", y: Math.ceil(Math.random() * 50) },
-    { x: "2017", y: Math.ceil(Math.random() * 50) },
-    { x: "2018", y: Math.ceil(Math.random() * 50) },
+    { label: "2014", value: Math.ceil(Math.random() * 50) },
+    { label: "2015", value: Math.ceil(Math.random() * 50) },
+    { label: "2016", value: Math.ceil(Math.random() * 50) },
+    { label: "2017", value: Math.ceil(Math.random() * 50) },
+    { label: "2018", value: Math.ceil(Math.random() * 50) },
+    { label: "2019", value: Math.ceil(Math.random() * 50) },
+    { label: "2020", value: Math.ceil(Math.random() * 50) },
+    { label: "2021", value: Math.ceil(Math.random() * 50) },
+    { label: "2022", value: Math.ceil(Math.random() * 50) },
+    { label: "2023", value: Math.ceil(Math.random() * 50) },
+    { label: "2024", value: Math.ceil(Math.random() * 50) },
+    { label: "2025", value: Math.ceil(Math.random() * 50) },
   ],
   marginTop = 20,
   marginRight = 20,
@@ -47,19 +54,19 @@ export default function LinePlot({
     // Crear escalas
     const x = d3
       .scalePoint()
-      .domain(data.map((d) => d.x)) // Usar los labels como dominio
+      .domain(data.map((d) => d.label)) // Usar los labels como dominio
       .range([marginLeft, width - marginRight])
       .padding(0.5);
 
     const y = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (d) => d.y) as number])
+      .domain([0, d3.max(data, (d) => d.value) as number])
       .range([height - marginBottom, marginTop]);
 
     const line = d3
-      .line<{ x: string; y: number }>()
-      .x((d) => x(d.x)!)
-      .y((d) => y(d.y));
+      .line<{ label: string; value: number }>()
+      .x((d) => x(d.label)!)
+      .y((d) => y(d.value));
 
     // Seleccionar el SVG y limpiar contenido previo
     const svg = d3.select(svgRef.current);
@@ -84,7 +91,10 @@ export default function LinePlot({
     svg
       .append("g")
       .attr("transform", `translate(0,${height - marginBottom})`)
-      .call(d3.axisBottom(x));
+      .call(d3.axisBottom(x))
+      .selectAll("text") // Seleccionar los labels del eje X
+      .attr("transform", "translate(-8,2), rotate(-45)") // Rotar -45 grados
+      .style("text-anchor", "end"); // Alinear el texto al final
 
     svg
       .append("g")
@@ -105,8 +115,8 @@ export default function LinePlot({
       .selectAll("circle")
       .data(data)
       .join("circle")
-      .attr("cx", (d) => x(d.x)!)
-      .attr("cy", (d) => y(d.y))
+      .attr("cx", (d) => x(d.label)!)
+      .attr("cy", (d) => y(d.value))
       .attr("r", 12) // Aumentar el radio de los puntos
       .attr("fill", "steelblue")
       .attr("stroke", "white")
@@ -118,12 +128,13 @@ export default function LinePlot({
       .data(data)
       .join("text")
       .attr("class", "value")
-      .attr("x", (d) => x(d.x)!)
-      .attr("y", (d) => y(d.y) + 4) // Centrar el texto dentro del punto
+      .attr("x", (d) => x(d.label)!)
+      .attr("y", (d) => y(d.value) + 4) // Centrar el texto dentro del punto
       .attr("text-anchor", "middle")
-      .attr("font-size", "10px")
+      .attr("font-size", "11px")
+      .attr("font-weight", "bold")
       .attr("fill", "white") // Cambiar el color del texto a blanco para contraste
-      .text((d) => (Number.isInteger(d.y) ? d.y : d.y.toFixed(2))); // Mostrar sin decimales si es entero
+      .text((d) => (Number.isInteger(d.value) ? d.value : d.value.toFixed(2))); // Mostrar sin decimales si es entero
   }, [dimensions, data, marginBottom, marginLeft, marginRight, marginTop]);
 
   return (

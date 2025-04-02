@@ -162,6 +162,12 @@ function transformadoresFabricanteEstado (data: TransformadorTabla[], estado: st
   return fabricantesEstados.sort((a,b) => a.label.localeCompare(b.label))
 }
 
+/**
+ * Convierte un array de objetos TransformadorCrude a un array de objetos TransformadorTabla
+ * @param {Array<TransformadorCrude>} data - Array de objetos TransformadorCrude
+ * @returns {Array<TransformadorTabla>} - Array de objetos TransformadorTabla
+ */
+
 function dataFilter (data: Array<TransformadorCrude>) {
   const transformadores: TransformadorTabla[] = []
   for (const key in data) {

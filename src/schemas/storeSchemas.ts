@@ -13,6 +13,8 @@ interface UseFisicoQuimicoState {
   setFisicoQuimicoTime: (fisicoQuimicoTime: string) => void;
   tableFisicoQuimico: FisicoQuimicoTabla[] | [];
   setTableFisicoQuimico: (tableFisicoQuimico: FisicoQuimicoTabla[] | []) => void;
+  idTransformador: string;
+  setIdTransformador: (idTransformador: string) => void;
 }
 
 export type { 

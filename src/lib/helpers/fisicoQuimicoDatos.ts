@@ -14,6 +14,49 @@ const excelDateToJSDate = (serial: number): string => {
 };
 
 
+function filterYear(data: FisicoQuimicoTabla[], year: string) {
+  const datafilter = data.filter((item) => {
+    const itemYear = item["FECHA MUESTRA"].split("/")[2]; // Extraer el año del campo "FECHA MUESTRA"
+    return itemYear === year; // Comparar con el año proporcionado
+  });
+  return datafilter;
+}
+
+function getYear(data: FisicoQuimicoTabla[]) {
+  const years = data.map((item) => item["FECHA MUESTRA"].split("/")[2]);
+  const uniqueYears = Array.from(new Set(years));
+  return uniqueYears;
+}
+
+function maxContHum(data: FisicoQuimicoTabla[], idTransformador: string) {
+  if (idTransformador !== "") {
+    data = data.filter((item) => item["ID TRAFO"] === idTransformador);
+  }
+  const years = getYear(data);
+  const maxValues = years.map((year) => {
+    const filteredData = data.filter((item) => item["FECHA MUESTRA"].split("/")[2] === year);
+    const maxValue = Math.max(...filteredData.map((item) => parseFloat(item["CONT. HUM"])));
+    return { label: year, value: maxValue };
+  });
+  return maxValues.sort((a, b) => Number(a.label) - Number(b.label));
+}
+
+function listarTransformadoresID(data: FisicoQuimicoTabla[]) {
+  const transformadoresID = data.map((item) => item["ID TRAFO"]);
+  const uniqueTransformadoresID = Array.from(new Set(transformadoresID));
+  const ordenadoTransformadoresID = uniqueTransformadoresID.sort((a, b) => {
+    return Number(a.split("-")[1]) - Number(b.split("-")[1]);
+  })
+  return ordenadoTransformadoresID;
+}
+
+/**
+ * Convierte un array de objetos FisicoQuimicoCrude a un array de objetos FisicoQuimicoTabla
+ * @param {Array<FisicoQuimicoCrude>} data - Array de objetos FisicoQuimicoCrude
+ * @returns {Array<FisicoQuimicoTabla>} - Array de objetos FisicoQuimicoTabla
+ */
+
+
 function dataFilterFisicoQuimico (data: Array<FisicoQuimicoCrude>) {
   const dataFilter: FisicoQuimicoTabla[] = []
   for (const key in data) {
@@ -50,4 +93,9 @@ function dataFilterFisicoQuimico (data: Array<FisicoQuimicoCrude>) {
   return dataFilter
 }
 
-export { dataFilterFisicoQuimico }
+export { 
+  dataFilterFisicoQuimico,
+  maxContHum,
+  filterYear,
+  listarTransformadoresID
+}

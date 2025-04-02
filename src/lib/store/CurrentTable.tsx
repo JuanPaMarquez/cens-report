@@ -14,6 +14,8 @@ const useFisicoQuimico = create<UseFisicoQuimicoState>((set) => ({
   setFisicoQuimicoTime: (fisicoQuimicoTime) => set({ fisicoQuimicoTime }),
   tableFisicoQuimico: getDataLocalStorage("tableFisicoQuimico"),
   setTableFisicoQuimico: (tableFisicoQuimico) => set({ tableFisicoQuimico }),
+  idTransformador: "",
+  setIdTransformador: (idTransformador) => set({ idTransformador })
 }));
 
 export { useTransformadores, useFisicoQuimico };

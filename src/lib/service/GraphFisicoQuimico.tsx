@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react"
 import { FisicoQuimicoTabla } from "../../schemas/fisicoQuimicoSchema"
 import { GraficasInterface } from "../../schemas/graphSchema"
-import LinePlot from "../../components/graph/LinePlot2"
+import LinePlot from "../../components/graph/LinePlot"
+import { maxContHum } from "../helpers/fisicoQuimicoDatos"
 
-export function GraphFisicoQuimico({ tableFisicoQuimico }: { tableFisicoQuimico: FisicoQuimicoTabla[] }) {
+export function GraphFisicoQuimico({ 
+  tableFisicoQuimico, 
+  idTransformador 
+}:{ 
+  tableFisicoQuimico: FisicoQuimicoTabla[], 
+  idTransformador: string 
+}){
   const [graficas, setGraficas] = useState<GraficasInterface[]>([])
   
   useEffect(() => {
@@ -12,11 +19,11 @@ export function GraphFisicoQuimico({ tableFisicoQuimico }: { tableFisicoQuimico:
         id: "contenido-humedad",
         title: "Contenido de Humedad",
         Component: LinePlot,
-        // data: contarElementos(tableTransformadores, "Estado"),
+        data: maxContHum(tableFisicoQuimico, idTransformador),
         styles: "md:col-span-2",
       }
     ])
-  }, [ tableFisicoQuimico ])
+  }, [ tableFisicoQuimico, idTransformador ])
 
   return { graficas }
 }
