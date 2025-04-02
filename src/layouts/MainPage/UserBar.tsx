@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { FaUser } from "react-icons/fa";
-import { RiArrowDropDownLine } from "react-icons/ri";
+// import { RiArrowDropDownLine } from "react-icons/ri";
 import { FaChevronCircleLeft, FaChevronCircleRight } from "react-icons/fa";
 
 export default function UserBar({
@@ -11,9 +11,9 @@ export default function UserBar({
   handleMenu: () => void }
 ) {
   
-  const user = {
-    name: "Ing Gerardo Camperos"
-  }
+  // const user = {
+  //   name: "Ing Gerardo Camperos"
+  // }
 
   useEffect(() => {
 
@@ -33,8 +33,8 @@ export default function UserBar({
         <div className="size-8 text-white font-bold bg-gray-300 flex justify-center items-center rounded-full">
           <FaUser className="size-4 text-black" />
         </div>
-          {user.name}
-          <RiArrowDropDownLine className="size-7 text-gray-500" />
+          {/* {user.name} */}
+          {/* <RiArrowDropDownLine className="size-7 text-gray-500" /> */}
       </button>
     </div>
   )
