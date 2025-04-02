@@ -7,7 +7,7 @@ export default function GraphContainer({
 }: { 
   grafica: GraficasInterface,
 }) {
-  const { Component, data, title, styles } = grafica;
+  const { Component, data, title, color, styles } = grafica;
   const [isVisible, setIsVisible] = useState(true); // Estado para controlar la visibilidad
 
   return (
@@ -23,7 +23,7 @@ export default function GraphContainer({
       </div>
       {isVisible && ( // Mostrar el gráfico solo si isVisible es true
         <div className="flex justify-start items-center h-full">
-          {data !== null ? <Component data={data} /> : <Component />}
+          {data !== null ? <Component data={data} color={color} /> : <Component />}
         </div>
       )}
     </div>

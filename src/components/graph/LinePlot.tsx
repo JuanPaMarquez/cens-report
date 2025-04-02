@@ -16,6 +16,7 @@ export default function LinePlot({
     { label: "2024", value: Math.ceil(Math.random() * 50) },
     { label: "2025", value: Math.ceil(Math.random() * 50) },
   ],
+  color = "#ADADAD",
   marginTop = 20,
   marginRight = 20,
   marginBottom = 30,
@@ -120,7 +121,7 @@ export default function LinePlot({
       .append("path")
       .datum(validData)
       .attr("fill", "none")
-      .attr("stroke", "steelblue")
+      .attr("stroke", color) // Usar el color proporcionado por el parámetro
       .attr("stroke-width", 3)
       .attr("d", line);
 
@@ -132,7 +133,7 @@ export default function LinePlot({
       .attr("cx", (d) => x(d.label)!)
       .attr("cy", (d) => y(d.value))
       .attr("r", 6) // Reducir el radio de los puntos
-      .attr("fill", "steelblue")
+      .attr("fill", color) // Usar el color proporcionado por el parámetro
       .attr("stroke", "white")
       .attr("stroke-width", 2);
 
@@ -150,7 +151,7 @@ export default function LinePlot({
           .attr("width", 30)
           .attr("height", 20)
           .attr("fill", "white")
-          .attr("stroke", "steelblue")
+          .attr("stroke", color) // Usar el color proporcionado por el parámetro
           .attr("stroke-width", 1.5)
           .attr("rx", 4); // Bordes redondeados
 
@@ -159,10 +160,10 @@ export default function LinePlot({
           .attr("alignment-baseline", "middle")
           .attr("font-size", "10px")
           .attr("font-weight", "bold")
-          .attr("fill", "steelblue")
+          .attr("fill", color) // Usar el color proporcionado por el parámetro
           .text((d) => (Number.isInteger(d.value) ? d.value : d.value.toFixed(2))); // Mostrar sin decimales si es entero
       });
-  }, [dimensions, data, marginBottom, marginLeft, marginRight, marginTop]);
+  }, [dimensions, data, color, marginBottom, marginLeft, marginRight, marginTop]);
 
   return (
     <div

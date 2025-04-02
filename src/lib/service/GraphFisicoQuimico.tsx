@@ -20,6 +20,7 @@ export function GraphFisicoQuimico({
         title: "Contenido de Humedad",
         Component: LinePlot,
         data: maxContCol(tableFisicoQuimico, idTransformador, "CONT. HUM"),
+        color: "#2A9AC9",
         styles: "md:col-span-2",
       },
       {
@@ -27,6 +28,7 @@ export function GraphFisicoQuimico({
         title: "Rigidez Dielectrica",
         Component: LinePlot,
         data: maxContCol(tableFisicoQuimico, idTransformador, "RIGIDEZ DIELECT"),
+        color: "#DE892F",
         styles: "md:col-span-2",
       },
       {
@@ -34,6 +36,7 @@ export function GraphFisicoQuimico({
         title: "Tension Interfacial",
         Component: LinePlot,
         data: maxContCol(tableFisicoQuimico, idTransformador, "TENSION INTERFACIAL"),
+        color: "#B62FDE",
         styles: "md:col-span-2",
       },
       {
@@ -41,6 +44,7 @@ export function GraphFisicoQuimico({
         title: "Numero de Acido",
         Component: LinePlot,
         data: maxContCol(tableFisicoQuimico, idTransformador, "NUM. ÁCIDO"),
+        color: "#955B18",
         styles: "md:col-span-2",
       },
       {
@@ -48,6 +52,7 @@ export function GraphFisicoQuimico({
         title: "Indice Colometrico",
         Component: LinePlot,
         data: maxContCol(tableFisicoQuimico, idTransformador, "IND. COLOR"),
+        color: "#013F88",
         styles: "md:col-span-2",
       },
       {
@@ -55,6 +60,7 @@ export function GraphFisicoQuimico({
         title: "Factor de Potencia",
         Component: LinePlot,
         data: maxContCol(tableFisicoQuimico, idTransformador, "FACTOR POT"),
+        color: "#1AA700",
         styles: "md:col-span-2",
       },
       {
@@ -62,6 +68,7 @@ export function GraphFisicoQuimico({
         title: "Densidad Relativa",
         Component: LinePlot,
         data: maxContCol(tableFisicoQuimico, idTransformador, "DESIDAD RELATIVA"),
+        color: "#D1CF16",
         styles: "md:col-span-2",
       },
       {
@@ -69,6 +76,7 @@ export function GraphFisicoQuimico({
         title: "Indice de Calidad",
         Component: LinePlot,
         data: maxContCol(tableFisicoQuimico, idTransformador, "INDICE CALIDAD"),
+        color: "#2A9AC9",
         styles: "md:col-span-2",
       },
       {
@@ -76,6 +84,7 @@ export function GraphFisicoQuimico({
         title: "Asufre Corrosivo",
         Component: LinePlot,
         data: generarDatosCorrosivos(tableFisicoQuimico, idTransformador),
+        color: "#888700",
         styles: "md:col-span-2",
       },
     ])

@@ -9,5 +9,6 @@ export interface GraficasInterface {
     | Array<{ category: string; values: { label: string; value: number; }[]; }>
     | Array<{ label: string | number; value: number; category: string | number; }>
     | null
+  color?: string // Color de la gráfica
   styles?: string // Estilos adicionales
 }
