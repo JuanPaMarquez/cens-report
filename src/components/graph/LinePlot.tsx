@@ -51,16 +51,30 @@ export default function LinePlot({
 
     const { width, height } = dimensions;
 
+    // Validar datos y filtrar valores inválidos
+    const validData = data.filter(
+      (d) => typeof d.value === "number" && !isNaN(d.value) && typeof d.label === "string"
+    );
+
+    if (validData.length === 0) {
+      console.error("No valid data available for rendering.");
+      return;
+    }
+
     // Crear escalas
+    const yMax = d3.max(validData, (d) => d.value) as number;
+    const yMin = d3.min(validData, (d) => d.value) as number;
+    const yPadding = (yMax - yMin) * 0.2; // Agregar un 20% de margen superior e inferior
+
     const x = d3
       .scalePoint()
-      .domain(data.map((d) => d.label)) // Usar los labels como dominio
+      .domain(validData.map((d) => d.label)) // Usar los labels como dominio
       .range([marginLeft, width - marginRight])
       .padding(0.5);
 
     const y = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (d) => d.value) as number])
+      .domain([yMin - yPadding, yMax + yPadding]) // Ajustar el dominio con el margen
       .range([height - marginBottom, marginTop]);
 
     const line = d3
@@ -104,7 +118,7 @@ export default function LinePlot({
     // Dibujar la línea
     svg
       .append("path")
-      .datum(data)
+      .datum(validData)
       .attr("fill", "none")
       .attr("stroke", "steelblue")
       .attr("stroke-width", 3)
@@ -113,28 +127,41 @@ export default function LinePlot({
     // Dibujar puntos
     svg
       .selectAll("circle")
-      .data(data)
+      .data(validData)
       .join("circle")
       .attr("cx", (d) => x(d.label)!)
       .attr("cy", (d) => y(d.value))
-      .attr("r", 12) // Aumentar el radio de los puntos
+      .attr("r", 6) // Reducir el radio de los puntos
       .attr("fill", "steelblue")
       .attr("stroke", "white")
       .attr("stroke-width", 2);
 
-    // Agregar etiquetas con valores dentro de los puntos
+    // Agregar etiquetas con valores dentro de un fondo blanco
     svg
-      .selectAll("text.value")
-      .data(data)
-      .join("text")
-      .attr("class", "value")
-      .attr("x", (d) => x(d.label)!)
-      .attr("y", (d) => y(d.value) + 4) // Centrar el texto dentro del punto
-      .attr("text-anchor", "middle")
-      .attr("font-size", "11px")
-      .attr("font-weight", "bold")
-      .attr("fill", "white") // Cambiar el color del texto a blanco para contraste
-      .text((d) => (Number.isInteger(d.value) ? d.value : d.value.toFixed(2))); // Mostrar sin decimales si es entero
+      .selectAll("g.value-label")
+      .data(validData)
+      .join("g")
+      .attr("class", "value-label")
+      .attr("transform", (d) => `translate(${x(d.label)}, ${y(d.value) - 15})`) // Posicionar encima del punto
+      .call((g) => {
+        g.append("rect") // Fondo blanco
+          .attr("x", -15)
+          .attr("y", -10)
+          .attr("width", 30)
+          .attr("height", 20)
+          .attr("fill", "white")
+          .attr("stroke", "steelblue")
+          .attr("stroke-width", 1.5)
+          .attr("rx", 4); // Bordes redondeados
+
+        g.append("text") // Texto del valor
+          .attr("text-anchor", "middle")
+          .attr("alignment-baseline", "middle")
+          .attr("font-size", "10px")
+          .attr("font-weight", "bold")
+          .attr("fill", "steelblue")
+          .text((d) => (Number.isInteger(d.value) ? d.value : d.value.toFixed(2))); // Mostrar sin decimales si es entero
+      });
   }, [dimensions, data, marginBottom, marginLeft, marginRight, marginTop]);
 
   return (

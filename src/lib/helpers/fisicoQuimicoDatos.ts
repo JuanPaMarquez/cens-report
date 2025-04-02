@@ -28,14 +28,14 @@ function getYear(data: FisicoQuimicoTabla[]) {
   return uniqueYears;
 }
 
-function maxContHum(data: FisicoQuimicoTabla[], idTransformador: string) {
+function maxContCol(data: FisicoQuimicoTabla[], idTransformador: string, columna: keyof FisicoQuimicoTabla) {
   if (idTransformador !== "") {
     data = data.filter((item) => item["ID TRAFO"] === idTransformador);
   }
   const years = getYear(data);
   const maxValues = years.map((year) => {
-    const filteredData = data.filter((item) => item["FECHA MUESTRA"].split("/")[2] === year);
-    const maxValue = Math.max(...filteredData.map((item) => parseFloat(item["CONT. HUM"])));
+    const filteredData = filterYear(data, year);
+    const maxValue = Math.max(...filteredData.map((item) => parseFloat(item[columna].toString())));
     return { label: year, value: maxValue };
   });
   return maxValues.sort((a, b) => Number(a.label) - Number(b.label));
@@ -48,6 +48,24 @@ function listarTransformadoresID(data: FisicoQuimicoTabla[]) {
     return Number(a.split("-")[1]) - Number(b.split("-")[1]);
   })
   return ordenadoTransformadoresID;
+}
+
+function contarCorrosivos (data: FisicoQuimicoTabla[], year: string) {
+  const dataFilter = filterYear(data, year)
+  const corrosivos = dataFilter.filter((item) => item["ASUFRE CORROSIVO"] !== "").length;
+  return corrosivos;
+}
+
+function generarDatosCorrosivos (data: FisicoQuimicoTabla[], idTransformador: string) {
+  if (idTransformador !== "") {
+    data = data.filter((item) => item["ID TRAFO"] === idTransformador);
+  }
+  const years = getYear(data);
+  const corrosivos = years.map((year) => {
+    const corrosivo = contarCorrosivos(data, year);
+    return { label: year, value: corrosivo };
+  });
+  return corrosivos.sort((a, b) => Number(a.label) - Number(b.label));
 }
 
 /**
@@ -95,7 +113,8 @@ function dataFilterFisicoQuimico (data: Array<FisicoQuimicoCrude>) {
 
 export { 
   dataFilterFisicoQuimico,
-  maxContHum,
+  maxContCol,
   filterYear,
+  generarDatosCorrosivos,
   listarTransformadoresID
 }
