@@ -105,10 +105,10 @@ export default function LinePlot({
     // Agregar ejes
     svg
       .append("g")
-      .attr("transform", `translate(0,${height - marginBottom})`)
+      .attr("transform", `translate(0,${height - marginBottom-10})`)
       .call(d3.axisBottom(x))
       .selectAll("text") // Seleccionar los labels del eje X
-      .attr("transform", "translate(-8,2), rotate(-45)") // Rotar -45 grados
+      .attr("transform", "translate(-8,2), rotate(-25)") // Rotar -45 grados
       .style("text-anchor", "end"); // Alinear el texto al final
 
     svg
