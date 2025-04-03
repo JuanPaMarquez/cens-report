@@ -1,6 +1,20 @@
 import * as d3 from "d3";
 import { useRef, useEffect, useState } from "react";
 
+interface DataPoint {
+  label: string;
+  value: number;
+}
+
+interface LinePlotProps {
+  data?: DataPoint[];
+  color?: string;
+  marginTop?: number;
+  marginRight?: number;
+  marginBottom?: number;
+  marginLeft?: number;
+}
+
 export default function LinePlot({
   data = [
     { label: "2014", value: Math.ceil(Math.random() * 50) },
@@ -21,19 +35,18 @@ export default function LinePlot({
   marginRight = 20,
   marginBottom = 30,
   marginLeft = 40,
-}) {
+}: LinePlotProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    // Usar ResizeObserver para actualizar las dimensiones del contenedor
     const resizeObserver = new ResizeObserver((entries) => {
       if (entries[0]) {
         const { width, height } = entries[0].contentRect;
         setDimensions({
-          width: width || 600, // Valor predeterminado si width es 0
-          height: height || 200, // Valor predeterminado si height es 0
+          width: width || 600,
+          height: height || 200,
         });
       }
     });
@@ -51,10 +64,8 @@ export default function LinePlot({
     if (dimensions.width === 0 || dimensions.height === 0) return;
 
     const { width, height } = dimensions;
-
-    // Validar datos y filtrar valores inválidos
-    const validData = data.filter(
-      (d) => typeof d.value === "number" && !isNaN(d.value) && typeof d.label === "string"
+    const validData = data.filter((d): d is DataPoint =>
+      typeof d.value === "number" && !isNaN(d.value) && typeof d.label === "string"
     );
 
     if (validData.length === 0) {
@@ -62,121 +73,132 @@ export default function LinePlot({
       return;
     }
 
-    // Crear escalas
-    const yMax = d3.max(validData, (d) => d.value) as number;
-    const yMin = d3.min(validData, (d) => d.value) as number;
-    const yPadding = (yMax - yMin) * 0.2; // Agregar un 20% de margen superior e inferior
-
-    const x = d3
-      .scalePoint()
-      .domain(validData.map((d) => d.label)) // Usar los labels como dominio
+    const x = d3.scalePoint<string>()
+      .domain(validData.map((d) => d.label))
       .range([marginLeft, width - marginRight])
       .padding(0.5);
 
-    const y = d3
-      .scaleLinear()
-      .domain([yMin - yPadding, yMax + yPadding]) // Ajustar el dominio con el margen
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(validData, (d) => d.value) ?? 0])
+      .nice()
       .range([height - marginBottom, marginTop]);
 
-    const line = d3
-      .line<{ label: string; value: number }>()
-      .x((d) => x(d.label)!)
+    const line = d3.line<DataPoint>()
+      .x((d) => x(d.label) ?? 0)
       .y((d) => y(d.value));
 
-    // Seleccionar el SVG y limpiar contenido previo
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
 
-    // Dibujar líneas horizontales en el fondo
-    svg
-      .append("g")
-      .attr("class", "grid-lines")
-      .selectAll("line")
-      .data(y.ticks(5)) // Dividir en 5 líneas horizontales
-      .join("line")
-      .attr("x1", marginLeft)
-      .attr("x2", width - marginRight)
-      .attr("y1", (d) => y(d))
-      .attr("y2", (d) => y(d))
-      .attr("stroke", "#ADADAD") // Color de las líneas
-      .attr("stroke-width", 1)
-      .attr("stroke-dasharray", "4 4"); // Líneas punteadas
+    const chartArea = svg.append("g");
 
-    // Agregar ejes
-    svg
-      .append("g")
-      .attr("transform", `translate(0,${height - marginBottom-10})`)
-      .call(d3.axisBottom(x))
-      .selectAll("text") // Seleccionar los labels del eje X
-      .attr("transform", "translate(-8,2), rotate(-25)") // Rotar -45 grados
-      .style("text-anchor", "end"); // Alinear el texto al final
+    const linePath = chartArea.append("path")
+      .datum(validData)
+      .attr("fill", "none")
+      .attr("stroke", color)
+      .attr("stroke-width", 1.5)
+      .attr("d", line);
 
-    svg
-      .append("g")
+    const pointsGroup = chartArea.append("g").attr("class", "points");
+
+    const circles = pointsGroup.selectAll("circle")
+      .data(validData)
+      .enter().append("circle")
+      .attr("r", 4)
+      .attr("fill", color);
+
+    // Removed unused 'labels' variable
+
+    const xAxisGroup = svg.append("g")
+      .attr("transform", `translate(0,${height - marginBottom})`)
+      .call(d3.axisBottom(x));
+
+    svg.append("g")
       .attr("transform", `translate(${marginLeft},0)`)
       .call(d3.axisLeft(y));
 
-    // Dibujar la línea
-    svg
-      .append("path")
-      .datum(validData)
-      .attr("fill", "none")
-      .attr("stroke", color) // Usar el color proporcionado por el parámetro
-      .attr("stroke-width", 3)
-      .attr("d", line);
+    function updateElements() {
+      circles
+        .attr("cx", (d) => x(d.label) ?? 0)
+        .attr("cy", (d) => y(d.value))
+        .style("display", (d) => (x(d.label) === undefined ? "none" : "block")); // Ocultar puntos fuera del dominio
 
-    // Dibujar puntos
-    svg
-      .selectAll("circle")
-      .data(validData)
-      .join("circle")
-      .attr("cx", (d) => x(d.label)!)
-      .attr("cy", (d) => y(d.value))
-      .attr("r", 6) // Reducir el radio de los puntos
-      .attr("fill", color) // Usar el color proporcionado por el parámetro
-      .attr("stroke", "white")
-      .attr("stroke-width", 2);
+      const labelGroups = pointsGroup.selectAll("g.label-group")
+        .data(validData)
+        .join("g")
+        .attr("class", "label-group")
+        .attr("transform", (d) => `translate(${x(d.label) ?? 0}, ${y(d.value) - 15})`)
+        .style("display", (d) => (x(d.label) === undefined ? "none" : "block")); // Ocultar etiquetas fuera del dominio
 
-    // Agregar etiquetas con valores dentro de un fondo blanco
-    svg
-      .selectAll("g.value-label")
-      .data(validData)
-      .join("g")
-      .attr("class", "value-label")
-      .attr("transform", (d) => `translate(${x(d.label)}, ${y(d.value) - 15})`) // Posicionar encima del punto
-      .call((g) => {
-        g.append("rect") // Fondo blanco
-          .attr("x", d => -(d.value.toFixed(2).toString().length*6)/2) // Centrar el rectángulo
-          .attr("y", -10)
-          .attr("width", d => (d.value.toFixed(2).toString().length*6)) // Ajustar el ancho según el texto
-          .attr("height", 20)
-          .attr("fill", "white")
-          .attr("stroke", color) // Usar el color proporcionado por el parámetro
-          .attr("stroke-width", 1.5)
-          .attr("rx", 4); // Bordes redondeados
+      labelGroups.selectAll("rect")
+        .data((d) => [d])
+        .join("rect")
+        .attr("x", (d) => -(d.value.toFixed(2).toString().length * 6) / 2) // Centrar el rectángulo
+        .attr("y", -10)
+        .attr("width", (d) => d.value.toFixed(2).toString().length * 6) // Ajustar el ancho según el texto
+        .attr("height", 20)
+        .attr("fill", "white")
+        .attr("stroke", color)
+        .attr("stroke-width", 1.5)
+        .attr("rx", 4); // Bordes redondeados
 
-        g.append("text") // Texto del valor
-          .attr("text-anchor", "middle")
-          .attr("alignment-baseline", "middle")
-          .attr("font-size", "10px")
-          .attr("font-weight", "bold")
-          .attr("fill", "black") // Usar el color proporcionado por el parámetro
-          .text((d) => (Number.isInteger(d.value) ? d.value : d.value.toFixed(2))); // Mostrar sin decimales si es entero
+      labelGroups.selectAll("text")
+        .data((d) => [d])
+        .join("text")
+        .attr("text-anchor", "middle")
+        .attr("alignment-baseline", "middle")
+        .attr("font-size", "10px")
+        .attr("font-weight", "bold")
+        .attr("fill", "black")
+        .text((d) => (Number.isInteger(d.value) ? d.value : d.value.toFixed(2))); // Mostrar máximo dos decimales si no es entero
+    }
+
+    const brush = d3.brushX()
+      .extent([[marginLeft, marginTop], [width - marginRight, height - marginBottom]])
+      .on("end", (event) => {
+        const selection = event.selection;
+        if (!selection) return;
+
+        const [x0, x1] = selection;
+        const newDomain = validData.filter(d => {
+          const pos = x(d.label);
+          return pos !== undefined && pos >= x0 && pos <= x1;
+        }).map(d => d.label);
+
+        if (newDomain.length === 0) return;
+
+        x.domain(newDomain);
+        xAxisGroup.transition().duration(1000).call(d3.axisBottom(x));
+        linePath.datum(validData.filter(d => newDomain.includes(d.label)))
+          .transition().duration(1000)
+          .attr("d", line);
+
+        updateElements();
+
+        // Quitar el cuadro gris del brushing
+        chartArea.select<SVGGElement>(".brush").call(brush.move, null);
       });
+
+    chartArea.append("g")
+      .attr("class", "brush")
+      .call(brush);
+
+    svg.on("dblclick", () => {
+      x.domain(validData.map(d => d.label));
+      xAxisGroup.transition().call(d3.axisBottom(x));
+      linePath.datum(validData)
+        .transition()
+        .attr("d", line);
+
+      updateElements();
+    });
+
+    updateElements();
   }, [dimensions, data, color, marginBottom, marginLeft, marginRight, marginTop]);
 
   return (
-    <div
-      ref={containerRef}
-      className="w-full h-full"
-      style={{ height: "100%", width: "100%" }} // Asegurar que ocupe todo el espacio del padre
-    >
-      <svg
-        ref={svgRef}
-        width={dimensions.width}
-        height={dimensions.height}
-        style={{ height: "300px", width: "100%" }} // Asegurar que el SVG ocupe todo el espacio
-      ></svg>
+    <div ref={containerRef} className="w-full h-full" style={{ height: "100%", width: "100%" }}>
+      <svg ref={svgRef} width={dimensions.width} height={dimensions.height} style={{ height: "300px", width: "100%" }}></svg>
     </div>
   );
 }
