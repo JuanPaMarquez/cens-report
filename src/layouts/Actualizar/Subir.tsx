@@ -3,15 +3,18 @@ import { useState } from "react"
 import { dataFilter } from '../../lib/helpers/transformadoresDatos'
 import { TransformadorCrude } from '../../schemas/transformadoresSchema'
 import { useNavigate } from 'react-router'
-import { useTransformadores, useFisicoQuimico } from '../../lib/store/CurrentTable'
+import { useTransformadores, useFisicoQuimico, useGases } from '../../lib/store/CurrentTable'
 import { dataFilterFisicoQuimico } from '../../lib/helpers/fisicoQuimicoDatos'
 import { FisicoQuimicoCrude } from '../../schemas/fisicoQuimicoSchema'
+import { dataFilterGases } from '../../lib/helpers/gasesDatos'
+import { GasesCrude } from '../../schemas/gasesSchema'
 
 export default function Subir() {
   const navegar = useNavigate()
   const [fileName, setFileName] = useState<string>('')
   const { tableTransformadores, setTableTransformadores, setTransformadoresTime } = useTransformadores()
   const { tableFisicoQuimico, setTableFisicoQuimico, setFisicoQuimicoTime } = useFisicoQuimico()
+  const { tableGases, setTableGases, setGasesTime } = useGases()
   const [selected, setSelected] = useState("transformadores");
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,6 +63,22 @@ export default function Subir() {
           setFisicoQuimicoTime(dataTime)
           window.localStorage.setItem('fisicoQuimicoTime', dataTime)
 
+        } else if (selected === "gases") {
+
+          const worksheet = workbook.Sheets["CROMATOGRAFIA DE GASES"];
+          if (worksheet['!ref']) {
+            const recorted = worksheet['!ref'].split(':')
+            worksheet['!ref'] = 'A7:' + recorted[1];     
+          }
+
+          const json: GasesCrude[] = XLSX.utils.sheet_to_json(worksheet);
+          const dataFiltered = dataFilterGases(json)
+          setTableGases(dataFiltered)
+          window.localStorage.setItem('tableGases', JSON.stringify(dataFiltered));
+          const dataTime = new Date().toISOString()
+          setGasesTime(dataTime)
+          window.localStorage.setItem('gasesTime', dataTime)
+
         }
       }
       reader.readAsArrayBuffer(file);
@@ -73,6 +92,8 @@ export default function Subir() {
       navegar('/dashboard/transformadores');
     } else if (selected === "fisico-quimico" && tableFisicoQuimico.length > 0) {
       navegar('/dashboard/fisico-quimico');
+    } else if (selected === "gases" && tableGases.length > 0) {
+      navegar('/dashboard/gases');
     } else {
       console.log("No hay datos por subir");
     }

@@ -1,5 +1,18 @@
 import { TransformadorTabla } from "../../schemas/transformadoresSchema"
 
+
+function excelDateToJSDate (serial: number): string {
+  const excelStartDate = new Date(1900, 0, 1); // 1 de enero de 1900
+  const date = new Date(excelStartDate.getTime() + (serial - 1) * 24 * 60 * 60 * 1000);
+
+  // Formatear la fecha como DD/MM/YYYY
+  return date.toLocaleDateString("es-CO", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+};
+
 function getDataLocalStorage(table: string) {
   if (window.localStorage.getItem(table)) {
     return JSON.parse(window.localStorage.getItem(table) || '[]');
@@ -72,4 +85,11 @@ function sumaColumnaPorTipo<K extends keyof TransformadorTabla>(
   return suma
 }
 
-export { contarElementos, sumaColumnaPorTipo, estadosTipos, getDataLocalStorage, getDataTimeLocalStorage }
+export { 
+  contarElementos, 
+  sumaColumnaPorTipo, 
+  estadosTipos, 
+  getDataLocalStorage, 
+  getDataTimeLocalStorage, 
+  excelDateToJSDate 
+}

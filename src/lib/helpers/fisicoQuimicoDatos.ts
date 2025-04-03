@@ -1,18 +1,5 @@
 import { FisicoQuimicoCrude, FisicoQuimicoTabla } from "../../schemas/fisicoQuimicoSchema";
-
-
-const excelDateToJSDate = (serial: number): string => {
-  const excelStartDate = new Date(1900, 0, 1); // 1 de enero de 1900
-  const date = new Date(excelStartDate.getTime() + (serial - 1) * 24 * 60 * 60 * 1000);
-
-  // Formatear la fecha como DD/MM/YYYY
-  return date.toLocaleDateString("es-CO", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-};
-
+import { excelDateToJSDate } from "./datos";
 
 function filterYear(data: FisicoQuimicoTabla[], year: string) {
   const datafilter = data.filter((item) => {
