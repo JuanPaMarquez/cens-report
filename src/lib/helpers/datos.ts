@@ -71,7 +71,9 @@ function maxContData<T, K extends keyof T>(
 }
 
 function listarTransformadoresID<T>(data: T[], campoId: keyof T) {
-  const transformadoresID = data.map((item) => item[campoId]);
+  const transformadoresID = data
+    .filter(item => typeof item[campoId] === 'string' && item[campoId].trim() !== "")
+    .map((item) => item[campoId]);
   const uniqueTransformadoresID = Array.from(new Set(transformadoresID));
   const ordenadoTransformadoresID = uniqueTransformadoresID.sort((a, b) => {
     return Number((a as string).split("-")[1]) - Number((b as string).split("-")[1]);
