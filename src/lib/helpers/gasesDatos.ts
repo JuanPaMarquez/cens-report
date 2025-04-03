@@ -1,5 +1,39 @@
 import { GasesCrude, GasesTabla } from "../../schemas/gasesSchema";
-import { excelDateToJSDate } from "./datos";
+import { excelDateToJSDate, maxContData } from "./datos";
+
+function datosFechas (data: GasesTabla[], idTransformadorGases: string, columna: keyof GasesTabla) {
+  let dataFilter = data
+
+  if (idTransformadorGases !== "") {
+    dataFilter = data.filter(item => item["ID TR"] === idTransformadorGases);
+  }
+
+  if (idTransformadorGases === "") {
+    return maxContData(data, idTransformadorGases, "ID TR", "FECHA MUEST", columna)
+  }
+  const result = dataFilter.map((item) => {
+    const fecha = item["FECHA MUEST"];
+    const hidrogeno = Number(item[columna]);
+
+    return {
+      label: fecha,
+      value: hidrogeno,
+    };
+  })
+
+  return result
+}
+
+function listarTransformadoresIDGases(data: GasesTabla[]) {
+  const transformadoresID = data
+    .filter(item => item["ID TR"].trim() !== "")
+    .map((item) => item["ID TR"]);
+  const uniqueTransformadoresID = Array.from(new Set(transformadoresID));
+  const ordenadoTransformadoresID = uniqueTransformadoresID.sort((a, b) => {
+    return Number(a.split("-")[1]) - Number(b.split("-")[1]);
+  })
+  return ordenadoTransformadoresID;
+}
 
 function dataFilterGases (data: Array<GasesCrude>) {
   const dataFilter: GasesTabla[] = []
@@ -40,4 +74,4 @@ function dataFilterGases (data: Array<GasesCrude>) {
   return dataFilter
 }
 
-export { dataFilterGases }
+export { dataFilterGases, listarTransformadoresIDGases, datosFechas }
