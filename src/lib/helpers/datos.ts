@@ -1,3 +1,4 @@
+import * as XLSX from 'xlsx'
 import { TransformadorTabla } from "../../schemas/transformadoresSchema"
 
 
@@ -48,7 +49,7 @@ function contarElementos<K extends keyof TransformadorTabla>(data: Transformador
     const cantidad = data.filter((item) => item[campo] === element).length
     totalElementos.push({ label: element.toString(), value: cantidad })
   }
-  return totalElementos
+  return totalElementos.sort((a, b) => b.value - a.value)
 }
 
 function estadosTipos (
@@ -85,11 +86,38 @@ function sumaColumnaPorTipo<K extends keyof TransformadorTabla>(
   return suma
 }
 
+function tomaDatos<C, T> (
+  workbook: XLSX.WorkBook, 
+  hoja: string, 
+  celdaInicio: string,
+  table: string,
+  time: string,
+  dataFilter: (data: C[]) => T[],
+  setTable: (data: T[]) => void,
+  setTime: (dataTime: string) => void,
+) {
+  const worksheet = workbook.Sheets[hoja];
+  
+  if (worksheet['!ref']) {
+    const recorted = worksheet['!ref'].split(':')
+    worksheet['!ref'] = `${celdaInicio}:` + recorted[1];     
+  }
+
+  const json: C[] = XLSX.utils.sheet_to_json(worksheet);
+  const dataFiltered = dataFilter(json)
+  setTable(dataFiltered)
+  window.localStorage.setItem(table, JSON.stringify(dataFiltered));
+  const dataTime = new Date().toISOString()
+  setTime(dataTime)
+  window.localStorage.setItem(time, dataTime)
+}
+
 export { 
   contarElementos, 
   sumaColumnaPorTipo, 
   estadosTipos, 
   getDataLocalStorage, 
   getDataTimeLocalStorage, 
-  excelDateToJSDate 
+  excelDateToJSDate,
+  tomaDatos
 }

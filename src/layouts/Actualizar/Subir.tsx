@@ -1,13 +1,14 @@
 import * as XLSX from 'xlsx'
 import { useState } from "react"
 import { dataFilter } from '../../lib/helpers/transformadoresDatos'
-import { TransformadorCrude } from '../../schemas/transformadoresSchema'
+import { TransformadorCrude, TransformadorTabla } from '../../schemas/transformadoresSchema'
 import { useNavigate } from 'react-router'
 import { useTransformadores, useFisicoQuimico, useGases } from '../../lib/store/CurrentTable'
 import { dataFilterFisicoQuimico } from '../../lib/helpers/fisicoQuimicoDatos'
-import { FisicoQuimicoCrude } from '../../schemas/fisicoQuimicoSchema'
+import { FisicoQuimicoCrude, FisicoQuimicoTabla } from '../../schemas/fisicoQuimicoSchema'
 import { dataFilterGases } from '../../lib/helpers/gasesDatos'
-import { GasesCrude } from '../../schemas/gasesSchema'
+import { GasesCrude, GasesTabla } from '../../schemas/gasesSchema'
+import { tomaDatos } from '../../lib/helpers/datos'
 
 export default function Subir() {
   const navegar = useNavigate()
@@ -31,54 +32,43 @@ export default function Subir() {
         // const sheetName = workbook.SheetNames;
 
         if (selected === "transformadores") {
-  
-          const worksheet = workbook.Sheets["CARACTERISTICAS GENERALES"];
-          
-          if (worksheet['!ref']) {
-            const recorted = worksheet['!ref'].split(':')
-            worksheet['!ref'] = 'A2:' + recorted[1];     
-          }
-    
-          const json: TransformadorCrude[] = XLSX.utils.sheet_to_json(worksheet);
-          const dataFiltered = dataFilter(json)
-          setTableTransformadores(dataFiltered)
-          window.localStorage.setItem('tableTransformadores', JSON.stringify(dataFiltered));
-          const dataTime = new Date().toISOString()
-          setTransformadoresTime(dataTime)
-          window.localStorage.setItem('transformadoresTime', dataTime)
+
+          tomaDatos<TransformadorCrude, TransformadorTabla>(
+            workbook, 
+            "CARACTERISTICAS GENERALES", 
+            "A2", 
+            "tableTransformadores", 
+            "transformadoresTime", 
+            dataFilter, 
+            setTableTransformadores, 
+            setTransformadoresTime
+          )
 
         } else if (selected === "fisico-quimico") {
 
-          const worksheet = workbook.Sheets["ANALISIS FISICO QUIMICO"];
-          if (worksheet['!ref']) {
-            const recorted = worksheet['!ref'].split(':')
-            worksheet['!ref'] = 'A7:' + recorted[1];     
-          }
-
-          const json: FisicoQuimicoCrude[] = XLSX.utils.sheet_to_json(worksheet);
-          const dataFiltered = dataFilterFisicoQuimico(json)
-          setTableFisicoQuimico(dataFiltered)
-          window.localStorage.setItem('tableFisicoQuimico', JSON.stringify(dataFiltered));
-          const dataTime = new Date().toISOString()
-          setFisicoQuimicoTime(dataTime)
-          window.localStorage.setItem('fisicoQuimicoTime', dataTime)
+          tomaDatos<FisicoQuimicoCrude, FisicoQuimicoTabla>(
+            workbook, 
+            "ANALISIS FISICO QUIMICO", 
+            "A7", 
+            "tableFisicoQuimico", 
+            "fisicoQuimicoTime", 
+            dataFilterFisicoQuimico, 
+            setTableFisicoQuimico, 
+            setFisicoQuimicoTime
+          )
 
         } else if (selected === "gases") {
 
-          const worksheet = workbook.Sheets["CROMATOGRAFIA DE GASES"];
-          if (worksheet['!ref']) {
-            const recorted = worksheet['!ref'].split(':')
-            worksheet['!ref'] = 'A7:' + recorted[1];     
-          }
-
-          const json: GasesCrude[] = XLSX.utils.sheet_to_json(worksheet);
-          const dataFiltered = dataFilterGases(json)
-          setTableGases(dataFiltered)
-          window.localStorage.setItem('tableGases', JSON.stringify(dataFiltered));
-          const dataTime = new Date().toISOString()
-          setGasesTime(dataTime)
-          window.localStorage.setItem('gasesTime', dataTime)
-
+          tomaDatos<GasesCrude, GasesTabla>(
+            workbook, 
+            "CROMATOGRAFIA DE GASES", 
+            "A7", 
+            "tableGases", 
+            "gasesTime", 
+            dataFilterGases, 
+            setTableGases, 
+            setGasesTime
+          )
         }
       }
       reader.readAsArrayBuffer(file);
