@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react"
 import { useGases } from "../../../lib/store/CurrentTable"
-import { listarTransformadoresIDGases } from "../../../lib/helpers/gasesDatos"
 import { GraphGases } from "../../../lib/service/GraphGases"
 import GraphContainer from "../../../components/ui/GraphContainer"
+import { listarTransformadoresID } from "../../../lib/helpers/datos"
 
 export default function Gases() {
   const { tableGases, gasesTime, setIdTransformadorGases, idTransformadorGases } = useGases()
   const [ date, setDate ] = useState<string>("")
   const { graficas } = GraphGases({ tableGases, idTransformadorGases })
-  const transformadoresID = listarTransformadoresIDGases(tableGases)
+  const transformadoresID = listarTransformadoresID(tableGases, "ID TR")
 
   useEffect(() => {
     const currentDate = gasesTime ? new Date(gasesTime).toLocaleString() : "No hay datos"

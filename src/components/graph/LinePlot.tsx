@@ -146,9 +146,9 @@ export default function LinePlot({
       .attr("transform", (d) => `translate(${x(d.label)}, ${y(d.value) - 15})`) // Posicionar encima del punto
       .call((g) => {
         g.append("rect") // Fondo blanco
-          .attr("x", -15)
+          .attr("x", d => -(d.value.toFixed(2).toString().length*6)/2) // Centrar el rectángulo
           .attr("y", -10)
-          .attr("width", 30)
+          .attr("width", d => (d.value.toFixed(2).toString().length*6)) // Ajustar el ancho según el texto
           .attr("height", 20)
           .attr("fill", "white")
           .attr("stroke", color) // Usar el color proporcionado por el parámetro
@@ -160,7 +160,7 @@ export default function LinePlot({
           .attr("alignment-baseline", "middle")
           .attr("font-size", "10px")
           .attr("font-weight", "bold")
-          .attr("fill", color) // Usar el color proporcionado por el parámetro
+          .attr("fill", "black") // Usar el color proporcionado por el parámetro
           .text((d) => (Number.isInteger(d.value) ? d.value : d.value.toFixed(2))); // Mostrar sin decimales si es entero
       });
   }, [dimensions, data, color, marginBottom, marginLeft, marginRight, marginTop]);

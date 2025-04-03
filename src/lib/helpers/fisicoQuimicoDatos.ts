@@ -1,44 +1,8 @@
 import { FisicoQuimicoCrude, FisicoQuimicoTabla } from "../../schemas/fisicoQuimicoSchema";
-import { excelDateToJSDate } from "./datos";
-
-function filterYear(data: FisicoQuimicoTabla[], year: string) {
-  const datafilter = data.filter((item) => {
-    const itemYear = item["FECHA MUESTRA"].split("/")[2]; // Extraer el año del campo "FECHA MUESTRA"
-    return itemYear === year; // Comparar con el año proporcionado
-  });
-  return datafilter;
-}
-
-function getYear(data: FisicoQuimicoTabla[]) {
-  const years = data.map((item) => item["FECHA MUESTRA"].split("/")[2]);
-  const uniqueYears = Array.from(new Set(years));
-  return uniqueYears;
-}
-
-function maxContCol(data: FisicoQuimicoTabla[], idTransformador: string, columna: keyof FisicoQuimicoTabla) {
-  if (idTransformador !== "") {
-    data = data.filter((item) => item["ID TRAFO"] === idTransformador);
-  }
-  const years = getYear(data);
-  const maxValues = years.map((year) => {
-    const filteredData = filterYear(data, year);
-    const maxValue = Math.max(...filteredData.map((item) => parseFloat(item[columna].toString())));
-    return { label: year, value: maxValue };
-  });
-  return maxValues.sort((a, b) => Number(a.label) - Number(b.label));
-}
-
-function listarTransformadoresID(data: FisicoQuimicoTabla[]) {
-  const transformadoresID = data.map((item) => item["ID TRAFO"]);
-  const uniqueTransformadoresID = Array.from(new Set(transformadoresID));
-  const ordenadoTransformadoresID = uniqueTransformadoresID.sort((a, b) => {
-    return Number(a.split("-")[1]) - Number(b.split("-")[1]);
-  })
-  return ordenadoTransformadoresID;
-}
+import { excelDateToJSDate, filterYear, getYear } from "./datos";
 
 function contarCorrosivos (data: FisicoQuimicoTabla[], year: string) {
-  const dataFilter = filterYear(data, year)
+  const dataFilter = filterYear(data, "FECHA MUESTRA", year)
   const corrosivos = dataFilter.filter((item) => item["ASUFRE CORROSIVO"] !== "").length;
   return corrosivos;
 }
@@ -47,7 +11,7 @@ function generarDatosCorrosivos (data: FisicoQuimicoTabla[], idTransformador: st
   if (idTransformador !== "") {
     data = data.filter((item) => item["ID TRAFO"] === idTransformador);
   }
-  const years = getYear(data);
+  const years = getYear(data, "FECHA MUESTRA");
   const corrosivos = years.map((year) => {
     const corrosivo = contarCorrosivos(data, year);
     return { label: year, value: corrosivo };
@@ -100,8 +64,5 @@ function dataFilterFisicoQuimico (data: Array<FisicoQuimicoCrude>) {
 
 export { 
   dataFilterFisicoQuimico,
-  maxContCol,
-  filterYear,
   generarDatosCorrosivos,
-  listarTransformadoresID
 }

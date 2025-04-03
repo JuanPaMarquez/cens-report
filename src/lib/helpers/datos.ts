@@ -28,6 +28,57 @@ function getDataTimeLocalStorage(table: string) {
   return '';
 }
 
+function filterYear<T>(data: T[], campoFecha: keyof T, year: string) {
+  const datafilter = data.filter((item) => {
+    const itemYear = typeof item[campoFecha] === 'string' ? item[campoFecha].split("/")[2] : ''; // Extraer el año del campo "FECHA MUESTRA"
+    return itemYear === year; // Comparar con el año proporcionado
+  });
+  return datafilter;
+}
+
+function getYear<T>(data: T[], campoFecha: keyof T) {
+  const years = data.map((item) => {
+    const dateValue = item[campoFecha];
+    return typeof dateValue === 'string' ? dateValue.split("/")[2] : '';
+  });
+  const uniqueYears = Array.from(new Set(years));
+  return uniqueYears;
+}
+
+function maxContData<T, K extends keyof T>(
+  data: T[], 
+  idTransformador: string, 
+  campoId: K, 
+  campoFecha: K, 
+  columna: K
+) {
+  if (idTransformador !== "") {
+    data = data.filter((item) => item[campoId] === idTransformador);
+  }
+  const years = getYear<T>(data, campoFecha);
+  const maxValues = years.map((year) => {
+    const filteredData = filterYear<T>(data, campoFecha, year);
+    const maxValue = Math.max(
+      ...filteredData.map((item) => {
+        let value = item[columna]?.toString() || "0";
+        value = value.replace(",", "."); // Reemplazar comas por puntos
+        return parseFloat(value) || 0; // Asegurar que se retorne 0 si el valor no es válido
+      })
+    );
+    return maxValue > 0 ? { label: year, value: maxValue } : null;
+  }).filter((item) => item !== null); // Filtrar los valores nulos;
+  return maxValues.sort((a, b) => Number(a.label) - Number(b.label));
+}
+
+function listarTransformadoresID<T>(data: T[], campoId: keyof T) {
+  const transformadoresID = data.map((item) => item[campoId]);
+  const uniqueTransformadoresID = Array.from(new Set(transformadoresID));
+  const ordenadoTransformadoresID = uniqueTransformadoresID.sort((a, b) => {
+    return Number((a as string).split("-")[1]) - Number((b as string).split("-")[1]);
+  })
+  return ordenadoTransformadoresID;
+}
+
 function contarTipos<K extends keyof TransformadorTabla>(data: TransformadorTabla[], campo: K) {
   const elementos: TransformadorTabla[K][] = []
 
@@ -119,5 +170,9 @@ export {
   getDataLocalStorage, 
   getDataTimeLocalStorage, 
   excelDateToJSDate,
-  tomaDatos
+  tomaDatos,
+  filterYear,
+  maxContData,
+  getYear,
+  listarTransformadoresID
 }

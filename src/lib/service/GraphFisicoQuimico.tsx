@@ -2,7 +2,8 @@ import { useEffect, useState } from "react"
 import { FisicoQuimicoTabla } from "../../schemas/fisicoQuimicoSchema"
 import { GraficasInterface } from "../../schemas/graphSchema"
 import LinePlot from "../../components/graph/LinePlot"
-import { generarDatosCorrosivos, maxContCol } from "../helpers/fisicoQuimicoDatos"
+import { generarDatosCorrosivos } from "../helpers/fisicoQuimicoDatos"
+import { maxContData } from "../helpers/datos"
 
 export function GraphFisicoQuimico({ 
   tableFisicoQuimico, 
@@ -19,7 +20,7 @@ export function GraphFisicoQuimico({
         id: "contenido-humedad",
         title: "Contenido de Humedad",
         Component: LinePlot,
-        data: maxContCol(tableFisicoQuimico, idTransformador, "CONT. HUM"),
+        data: maxContData(tableFisicoQuimico, idTransformador, "ID TRAFO", "FECHA MUESTRA", "CONT. HUM"),
         color: "#2A9AC9",
         styles: "md:col-span-2",
       },
@@ -27,7 +28,7 @@ export function GraphFisicoQuimico({
         id: "rigidez-dielectrica",
         title: "Rigidez Dielectrica",
         Component: LinePlot,
-        data: maxContCol(tableFisicoQuimico, idTransformador, "RIGIDEZ DIELECT"),
+        data: maxContData(tableFisicoQuimico, idTransformador, "ID TRAFO", "FECHA MUESTRA", "RIGIDEZ DIELECT"),
         color: "#DE892F",
         styles: "md:col-span-2",
       },
@@ -35,7 +36,7 @@ export function GraphFisicoQuimico({
         id: "tension-interfacial",
         title: "Tension Interfacial",
         Component: LinePlot,
-        data: maxContCol(tableFisicoQuimico, idTransformador, "TENSION INTERFACIAL"),
+        data: maxContData(tableFisicoQuimico, idTransformador, "ID TRAFO", "FECHA MUESTRA", "TENSION INTERFACIAL"),
         color: "#B62FDE",
         styles: "md:col-span-2",
       },
@@ -43,7 +44,7 @@ export function GraphFisicoQuimico({
         id: "numero-acido",
         title: "Numero de Acido",
         Component: LinePlot,
-        data: maxContCol(tableFisicoQuimico, idTransformador, "NUM. ÁCIDO"),
+        data: maxContData(tableFisicoQuimico, idTransformador, "ID TRAFO", "FECHA MUESTRA", "NUM. ÁCIDO"),
         color: "#955B18",
         styles: "md:col-span-2",
       },
@@ -51,7 +52,7 @@ export function GraphFisicoQuimico({
         id: "indice-color",
         title: "Indice Colometrico",
         Component: LinePlot,
-        data: maxContCol(tableFisicoQuimico, idTransformador, "IND. COLOR"),
+        data: maxContData(tableFisicoQuimico, idTransformador, "ID TRAFO", "FECHA MUESTRA", "IND. COLOR"),
         color: "#013F88",
         styles: "md:col-span-2",
       },
@@ -59,7 +60,7 @@ export function GraphFisicoQuimico({
         id: "factor-potencia",
         title: "Factor de Potencia",
         Component: LinePlot,
-        data: maxContCol(tableFisicoQuimico, idTransformador, "FACTOR POT"),
+        data: maxContData(tableFisicoQuimico, idTransformador, "ID TRAFO", "FECHA MUESTRA", "FACTOR POT"),
         color: "#1AA700",
         styles: "md:col-span-2",
       },
@@ -67,7 +68,7 @@ export function GraphFisicoQuimico({
         id: "densidad-relativa",
         title: "Densidad Relativa",
         Component: LinePlot,
-        data: maxContCol(tableFisicoQuimico, idTransformador, "DESIDAD RELATIVA"),
+        data: maxContData(tableFisicoQuimico, idTransformador, "ID TRAFO", "FECHA MUESTRA", "DESIDAD RELATIVA"),
         color: "#D1CF16",
         styles: "md:col-span-2",
       },
@@ -75,7 +76,7 @@ export function GraphFisicoQuimico({
         id: "indice-calidad",
         title: "Indice de Calidad",
         Component: LinePlot,
-        data: maxContCol(tableFisicoQuimico, idTransformador, "INDICE CALIDAD"),
+        data: maxContData(tableFisicoQuimico, idTransformador, "ID TRAFO", "FECHA MUESTRA", "INDICE CALIDAD"),
         color: "#2A9AC9",
         styles: "md:col-span-2",
       },

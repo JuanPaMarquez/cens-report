@@ -2,13 +2,13 @@ import { useEffect, useState } from "react"
 import { useFisicoQuimico } from "../../../lib/store/CurrentTable"
 import { GraphFisicoQuimico } from "../../../lib/service/GraphFisicoQuimico"
 import GraphContainer from "../../../components/ui/GraphContainer"
-import { listarTransformadoresID } from "../../../lib/helpers/fisicoQuimicoDatos"
+import { listarTransformadoresID } from "../../../lib/helpers/datos"
 
 export default function Fisicoquimico() {
   const { fisicoQuimicoTime, tableFisicoQuimico, setIdTransformador, idTransformador } = useFisicoQuimico()
   const [ date, setDate ] = useState<string>("")
   const { graficas } = GraphFisicoQuimico({ tableFisicoQuimico, idTransformador })
-  const transformadoresID = listarTransformadoresID(tableFisicoQuimico)
+  const transformadoresID = listarTransformadoresID(tableFisicoQuimico, "ID TRAFO")
 
   useEffect(() => {
     const currentDate = fisicoQuimicoTime ? new Date(fisicoQuimicoTime).toLocaleString() : "No hay datos"
