@@ -19,6 +19,26 @@ function generarDatosCorrosivos (data: FisicoQuimicoTabla[], idTransformador: st
   return corrosivos.sort((a, b) => Number(a.label) - Number(b.label));
 }
 
+function muestrasEjecutadas (data: FisicoQuimicoTabla[]) {
+  const years = getYear(data, "FECHA MUESTRA").sort((a, b) => Number(a) - Number(b));
+
+  return years.map((year) => {
+    const dataFilter = filterYear(data, "FECHA MUESTRA", year)
+    const mineral = dataFilter.filter((item) => item["TIPO DE ACEITE"] === "MINERAL").length;
+    const vegetal = dataFilter.filter((item) => item["TIPO DE ACEITE"] === "VEGETAL").length;
+    const sinEspecificar = dataFilter.filter((item) => item["TIPO DE ACEITE"] !== "MINERAL" && item["TIPO DE ACEITE"] !== "VEGETAL").length;
+    return { label: year, value1: mineral, value2: vegetal, value3: sinEspecificar };
+  })
+}
+
+// data = [
+//   { label: "2015", value1: 30, value2: 50, value3: 20 },
+//   { label: "2020", value1: 80, value2: 40, value3: 20 },
+//   { label: "2022", value1: 45, value2: 60, value3: 20 },
+//   { label: "2024", value1: 60, value2: 70, value3: 20 },
+//   { label: "2025", value1: 60, value2: 70, value3: 20 },
+// ],
+
 /**
  * Convierte un array de objetos FisicoQuimicoCrude a un array de objetos FisicoQuimicoTabla
  * @param {Array<FisicoQuimicoCrude>} data - Array de objetos FisicoQuimicoCrude
@@ -65,4 +85,5 @@ function dataFilterFisicoQuimico (data: Array<FisicoQuimicoCrude>) {
 export { 
   dataFilterFisicoQuimico,
   generarDatosCorrosivos,
+  muestrasEjecutadas
 }

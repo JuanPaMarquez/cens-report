@@ -2,8 +2,9 @@ import { useEffect, useState } from "react"
 import { FisicoQuimicoTabla } from "../../schemas/fisicoQuimicoSchema"
 import { GraficasInterface } from "../../schemas/graphSchema"
 import LinePlot from "../../components/graph/LinePlot"
-import { generarDatosCorrosivos } from "../helpers/fisicoQuimicoDatos"
+import { generarDatosCorrosivos, muestrasEjecutadas } from "../helpers/fisicoQuimicoDatos"
 import { maxContData } from "../helpers/datos"
+import BarPlotMulti from "../../components/graph/BarPlotMulti"
 
 export function GraphFisicoQuimico({ 
   tableFisicoQuimico, 
@@ -88,8 +89,16 @@ export function GraphFisicoQuimico({
         color: "#888700",
         styles: "md:col-span-2",
       },
+      {
+        id: "cantidad-muestras",
+        title: "Cantidad de Muestras Ejecutadas",
+        Component: BarPlotMulti,
+        data: muestrasEjecutadas(tableFisicoQuimico),
+        color: "#2A9AC9",
+        styles: "md:col-span-2",
+      },
     ])
   }, [ tableFisicoQuimico, idTransformador ])
-
+  
   return { graficas }
 }
