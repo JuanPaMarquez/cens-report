@@ -34,7 +34,7 @@ export default function LinePlot({
   marginTop = 20,
   marginRight = 20,
   marginBottom = 30,
-  marginLeft = 40,
+  marginLeft = 45,
 }: LinePlotProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -76,7 +76,7 @@ export default function LinePlot({
     const yValues = validData.map(d => d.value);
     const yMin = d3.min(yValues) ?? 0;
     const yMax = d3.max(yValues) ?? 100;
-    const yPadding = (yMax - yMin) * 0.2 || 10;
+    const yPadding = (yMax - yMin) * 0.1 || 10;
 
     const y = d3.scaleLinear()
       .domain([yMin - yPadding, yMax + yPadding])
@@ -112,10 +112,10 @@ export default function LinePlot({
       .call(d3.axisBottom(x));
 
     xAxisGroup.selectAll("text")
-      .attr("transform", "rotate(-45)")
+      .attr("transform", "rotate(-15)")
       .attr("text-anchor", "end")
-      .attr("x", -6)
-      .attr("y", 7)
+      .attr("x", -2)
+      .attr("y", 10)
       .attr("dy", ".35em");
 
     const yAxisGroup = svg.append("g")
@@ -183,7 +183,7 @@ export default function LinePlot({
 
         xAxisGroup.transition().duration(1000).call(d3.axisBottom(x));
         xAxisGroup.selectAll("text")
-          .attr("transform", "rotate(-45)")
+          .attr("transform", "rotate(-18)")
           .attr("text-anchor", "end")
           .attr("x", -5)
           .attr("y", 0)
@@ -209,7 +209,7 @@ export default function LinePlot({
 
       xAxisGroup.transition().call(d3.axisBottom(x));
       xAxisGroup.selectAll("text")
-        .attr("transform", "rotate(-45)")
+        .attr("transform", "rotate(-18)")
         .attr("text-anchor", "end")
         .attr("x", -5)
         .attr("y", 0)
@@ -229,7 +229,7 @@ export default function LinePlot({
 
   return (
     <div ref={containerRef} className="w-full h-full" style={{ height: "100%", width: "100%" }}>
-      <svg ref={svgRef} width={dimensions.width} height={dimensions.height} style={{ height: "300px", width: "100%" }}></svg>
+      <svg ref={svgRef} width={dimensions.width} height={dimensions.height} style={{ height: "310px", width: "100%" }}></svg>
     </div>
   );
 }
