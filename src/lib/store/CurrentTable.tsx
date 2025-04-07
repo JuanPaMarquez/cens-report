@@ -7,6 +7,8 @@ const useTransformadores = create<UseTransformadoresState>((set) => ({
   setTransformadoresTime: (transformadoresTime) => set({ transformadoresTime }),
   tableTransformadores: getDataLocalStorage("tableTransformadores"),
   setTableTransformadores: (tableTransformadores) => set({ tableTransformadores }),
+  idTransformador: "",
+  setIdTransformador: (idTransformador) => set({ idTransformador })
 }));
 
 const useFisicoQuimico = create<UseFisicoQuimicoState>((set) => ({

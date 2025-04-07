@@ -81,6 +81,17 @@ function listarTransformadoresID<T>(data: T[], campoId: keyof T) {
   return ordenadoTransformadoresID;
 }
 
+function listarTransformadoresIDNumber<T>(data: T[], campoId: keyof T) {
+  const transformadoresID = data
+    .filter(item => typeof item[campoId] === 'string' && item[campoId].trim() !== "")
+    .map((item) => item[campoId]);
+  const uniqueTransformadoresID = Array.from(new Set(transformadoresID));
+  const ordenadoTransformadoresID = uniqueTransformadoresID.sort((a, b) => {
+    return Number((a as string)) - Number((b as string));
+  })
+  return ordenadoTransformadoresID;
+}
+
 function contarTipos<K extends keyof TransformadorTabla>(data: TransformadorTabla[], campo: K) {
   const elementos: TransformadorTabla[K][] = []
 
@@ -176,5 +187,6 @@ export {
   filterYear,
   maxContData,
   getYear,
-  listarTransformadoresID
+  listarTransformadoresID,
+  listarTransformadoresIDNumber
 }

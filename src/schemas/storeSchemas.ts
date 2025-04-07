@@ -9,6 +9,8 @@ interface UseTransformadoresState {
   // variable que guarda la tabla transformadores
   tableTransformadores: TransformadorTabla[] | [];
   setTableTransformadores: (tableTransformadores: TransformadorTabla[] | []) => void;
+  idTransformador: string;
+  setIdTransformador: (idTransformador: string) => void;
 }
 
 interface UseFisicoQuimicoState {

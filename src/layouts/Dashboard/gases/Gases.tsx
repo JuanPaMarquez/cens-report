@@ -3,6 +3,7 @@ import { useGases } from "../../../lib/store/CurrentTable"
 import { GraphGases } from "../../../lib/service/GraphGases"
 import GraphContainer from "../../../components/ui/GraphContainer"
 import { listarTransformadoresID } from "../../../lib/helpers/datos"
+import SelectID from "../../../components/ui/Selects"
 
 export default function Gases() {
   const { tableGases, gasesTime, setIdTransformadorGases, idTransformadorGases } = useGases()
@@ -18,15 +19,11 @@ export default function Gases() {
   return (
     <div className="w-full h-full">
       <h1 className="pb-2 font-bold text-center md:text-left">Ultima actualizacion: {date}</h1>
-      <select 
-        className="border border-gray-300 rounded-md shadow-sm m-1 p-2" id="select-transformador"
-        onChange={(e) => setIdTransformadorGases(e.target.value)}
-      > 
-        <option value="">Seleccione un transformador</option>
-        {transformadoresID.map((id) => (
-          <option key={id} value={id}>{id}</option>
-        ))}
-      </select>
+      <SelectID
+        idTransformador={idTransformadorGases} 
+        setIdTransformador={setIdTransformadorGases} 
+        transformadoresID={transformadoresID.map(String)}
+      />
       <div id="table-graficas" className="w-full">
         { tableGases.length > 0 
           ? <div className="grid grid-flow-dense gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 min-[100rem]:grid-cols-5 items-start">
