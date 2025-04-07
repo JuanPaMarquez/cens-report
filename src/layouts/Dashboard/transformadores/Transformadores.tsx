@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useTransformadores } from "../../../lib/store/CurrentTable"
 import { GraphTransformadores } from "../../../lib/service/GraphTransformadores"
 import GraphContainer from "../../../components/ui/GraphContainer"
-import { listarTransformadoresIDNumber } from "../../../lib/helpers/datos"
+import { listarTransformadoresID } from "../../../lib/helpers/datos"
 import SelectID from "../../../components/ui/Selects"
 import VerTransformador from "./VerTransformador"
 
@@ -10,7 +10,7 @@ export default function Transformadores() {
   const { tableTransformadores, transformadoresTime, setIdTransformador, idTransformador } = useTransformadores()
   const [ date, setDate ] = useState<string>("")
   const { graficas } = GraphTransformadores({ tableTransformadores })
-  const transformadoresID = listarTransformadoresIDNumber(tableTransformadores, "TR")
+  const transformadoresID = listarTransformadoresID(tableTransformadores, "ID")
 
   useEffect(() => {
     const currentDate = transformadoresTime ? new Date(transformadoresTime).toLocaleString() : "No hay datos"

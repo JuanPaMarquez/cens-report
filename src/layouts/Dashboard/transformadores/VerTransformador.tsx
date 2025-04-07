@@ -2,12 +2,12 @@ import { useTransformadores } from "../../../lib/store/CurrentTable"
 
 export default function VerTransformador({ idTransformador }: { idTransformador: string }) {
   const { tableTransformadores } = useTransformadores()
-  const transformador = tableTransformadores.find((transformador) => transformador["TR"] === idTransformador)
+  const transformador = tableTransformadores.find((transformador) => transformador["ID"] === idTransformador)
   const { idHistorial, ...transformadorSinHistorial } = transformador ?? {};
   console.log(idHistorial)
   return (
     <div className="mt-5 flex flex-col gap-4 items-center w-full h-full">
-      <h1 className="font-bold text-center">Transformador TR-{idTransformador}</h1>
+      <h1 className="font-bold text-center">Transformador {idTransformador}</h1>
       <div className="w-full max-w-[600px] overflow-y-auto overflow-x-auto border border-gray-300 rounded-2xl"> {/* Añadido overflow-x-auto */}
         <table className="w-full border-collapse table-fixed">
           <thead>
